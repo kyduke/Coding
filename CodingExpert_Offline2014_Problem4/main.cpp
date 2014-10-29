@@ -9,7 +9,6 @@ struct point
 {
     long x;
     long y;
-    int i;
 };
 
 struct particle
@@ -155,7 +154,6 @@ void getKthParticleXY(unsigned int k, long* x, long* y)
                 p.push_back(point());
                 p.back().x = node->x;
                 p.back().y = node->y;
-                p.back().i = node->i;
             }
             node = node->left;
         }
