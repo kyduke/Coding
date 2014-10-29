@@ -9,6 +9,7 @@ struct point
 {
     long x;
     long y;
+	int i;
 };
 
 struct particle
@@ -36,6 +37,11 @@ int fac[5][9] = {
     {-1, 0, 4, 0, 1, 2, 0, -1, 1},
     {1, 0, 3, 0, 1, 2, 0, -1, 1}
 };
+
+float round(float x)
+{
+   return x >= 0.0f ? floorf(x + 0.5f) : ceilf(x - 0.5f);
+}
 
 bool cmd(const point& p1, const point& p2)
 {
@@ -131,44 +137,9 @@ void insert(struct particle* p)
     }
 }
 
-void removeLeft(struct particle* p)
-{
-    struct particle* up = p->up;
-    struct particle* down = p->down;
-    struct particle* right = p->right;
-    
-    if (bottomRight == p->i)
-    {
-        if (up == NULL)
-        {
-            bottomRight = 0;
-        }
-        else
-        {
-            bottomRight = up->i;
-        }
-    }
-    
-    if (up != NULL)
-    {
-        up->down = down;
-    }
-    
-    if (down != NULL)
-    {
-        down->up = up;
-    }
-    
-    if (right != NULL)
-    {
-        right->left = NULL;
-    }
-}
-
 void getKthParticleXY(unsigned int k, long* x, long* y)
 {
     vector<point> p;
-    int rightCount;
     long px, py;
     
     struct particle* node = &particles[bottomRight];
@@ -176,24 +147,19 @@ void getKthParticleXY(unsigned int k, long* x, long* y)
     
     while (node)
     {
-        rightCount = 0;
         right = node;
         while (node)
         {
             if (node->d == 4)
             {
-                rightCount++;
+                p.push_back(point());
+				p.back().x = node->x;
+				p.back().y = node->y;
+				p.back().i = node->i;
             }
             node = node->left;
         }
         node = right;
-        while (rightCount--)
-        {
-            p.push_back(point());
-            p.back().x = node->x;
-            p.back().y = node->y;
-            node = node->left;
-        }
         node = right->up;
     }
     if (p.size() < k)
@@ -203,46 +169,18 @@ void getKthParticleXY(unsigned int k, long* x, long* y)
         return;
     }
     sort(p.begin(), p.end(), cmd);
-    
-    node = &particles[bottomRight];
-    px = p[k - 1].x;
-    py = p[k - 1].y;
-    while (node)
-    {
-        if (node->y == py)
-        {
-            break;
-        }
-        node = node->up;
-    }
-    
-    rightCount = 0;
-    right = node;
-    while (node)
-    {
-        if (node->x == px)
-        {
-            break;
-        }
-        rightCount++;
-        node = node->left;
-    }
-    
-    node = right;
-    while (node)
-    {
-        if (node->d == 4)
-        {
-            if (rightCount == 0)
-            {
-                *x = node->x;
-                *y = node->y;
-                break;
-            }
-            rightCount--;
-        }
-        node = node->left;
-    }
+
+	k--;
+	*x = p[k].x;
+	*y = p[k].y;
+	while (k--)
+	{
+		if (*x != p[k].x)
+		{
+			return;
+		}
+		*y = p[k].y;
+	}
 }
 
 bool matchDirection(long x, long y, long d)
@@ -365,7 +303,7 @@ void process(long x, long y, long targetX)
                     matchD = fac[d][5];
                 }
                 cX = tX + dist * fac[d][6];
-                cY = tX + dist * fac[d][7];
+                cY = tY + dist * fac[d][7];
                 if (matchDirection(cX, cY, fac[d][8]) == true)
                 {
                     match++;
@@ -431,7 +369,6 @@ int main(int argc, char* argv[])
     return 0;
 }
 
-
 /*
 2
 5 4 2
@@ -446,4 +383,3 @@ int main(int argc, char* argv[])
 4 3
 0 0
 */
-
