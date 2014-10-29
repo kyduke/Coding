@@ -9,7 +9,7 @@ struct point
 {
     long x;
     long y;
-	int i;
+    int i;
 };
 
 struct particle
@@ -153,9 +153,9 @@ void getKthParticleXY(unsigned int k, long* x, long* y)
             if (node->d == 4)
             {
                 p.push_back(point());
-				p.back().x = node->x;
-				p.back().y = node->y;
-				p.back().i = node->i;
+                p.back().x = node->x;
+                p.back().y = node->y;
+                p.back().i = node->i;
             }
             node = node->left;
         }
@@ -170,17 +170,17 @@ void getKthParticleXY(unsigned int k, long* x, long* y)
     }
     sort(p.begin(), p.end(), cmd);
 
-	k--;
-	*x = p[k].x;
-	*y = p[k].y;
-	while (k--)
-	{
-		if (*x != p[k].x)
-		{
-			return;
-		}
-		*y = p[k].y;
-	}
+    k--;
+    *x = p[k].x;
+    *y = p[k].y;
+    while (k--)
+    {
+        if (*x != p[k].x)
+        {
+            return;
+        }
+        *y = p[k].y;
+    }
 }
 
 bool matchDirection(long x, long y, long d)
