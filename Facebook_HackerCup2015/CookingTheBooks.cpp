@@ -5,7 +5,7 @@
 
 using namespace std;
 
-void printMax(char* num)
+void printMin(char* num)
 {
     int i, j, l;
     char c;
@@ -42,7 +42,7 @@ void printMax(char* num)
     cout << buf << "\n";
 }
 
-void printMin(char* num)
+void printMax(char* num)
 {
     int i, j, l;
     char c, e;
@@ -84,8 +84,8 @@ int main(int argc, char* argv[])
 {
     char num[10] = "31524";
 
-    printMax(num);
     printMin(num);
+    printMax(num);
 
     return 0;
 }
