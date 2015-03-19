@@ -1,83 +1,85 @@
+//
+//  main.cpp
+//  GoogleCodeJam_QualificationRound2014_DeceitfulWar
+//
+//  Created by Youngduke Koh on 3/19/15.
+//  Copyright (c) 2015 Youngduke Koh. All rights reserved.
+//
+
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <utility>
 #include <algorithm>
 
 using namespace std;
 
-int deceitfulWar(double* a, double* b, int n) {
-	int i, count, temp;
-	double m;
-
-	count = 0;
-	m = b[0];
-	for (i = 0; i < n; i++) {
-		if (a[i] > m) break;
-		count++;
-	}
-
-	temp = 0;
-	m = a[n - 1];
-	for (i = n - 1; i >= 0; i--) {
-		if (b[i] < m) break;
-		temp++;
-	}
-
-	if (temp > count) count = temp;
-
-	return n - count;
+int deceitfulWar(pair<double, int>* a, int n) {
+    int i, count, sum;
+    
+    count = 0;
+    sum = 0;
+    for (i = n - 1; i >= 0; i--) {
+        if (a[i].second == 1) {
+            sum++;
+        } else {
+            if (sum > 0) {
+                sum--;
+                count++;
+            }
+        }
+    }
+    
+    return count;
 }
 
-int war(double* a, double* b, int n) {
-	int i, j;
-	bool big;
-
-	i = 0;
-	while (i < n) {
-		big = false;
-		for (j = 0; j < n; j++) {
-			if (b[j] > a[i]) {
-				b[j] = 0.0;
-				big = true;
-				break;
-			}
-		}
-		if (big == false) break;
-		i++;
-	}
-
-	return n - i;
+int war(pair<double, int>* a, int n) {
+    int i, count, sum;
+    
+    count = 0;
+    sum = 0;
+    for (i = n - 1; i >= 0; i--) {
+        sum += a[i].second;
+        if (sum > count) count = sum;
+    }
+    
+    return count;
 }
 
 int main(int argc, char* argv[]) {
-	int T, i, N, j;
-	double temp;
-	double a[1000], b[1000], c[1000];
-
-	cin >> T;
-	i = 0;
-	while (i < T) {
-		i++;
-		cin >> N;
-		j = 0;
-		while (j < N) {
-			cin >> temp;
-			a[j++] = temp;
-		}
-		j = 0;
-		while (j < N) {
-			cin >> temp;
-			b[j] = temp;
-			c[j] = temp;
-			j++;
-		}
-		sort(a, a + N);
-		sort(b, b + N);
-		sort(c, c + N);
-		cout << "Case #" << i << ": ";
-		cout << deceitfulWar(a, b, N) << " ";
-		cout << war(a, c, N) << "\n";
-	}
-
-	return 0;
+    int T, i, N, j;
+    double temp;
+    pair<double, int> a[2000];
+    
+    ifstream in("in.txt");
+    cin.rdbuf(in.rdbuf());
+    
+    cin >> T;
+    i = 0;
+    while (i < T) {
+        i++;
+        cin >> N;
+        j = 0;
+        while (j < N) {
+            cin >> temp;
+            a[j].first = temp;
+            a[j].second = 1;
+            j++;
+        }
+        j = 0;
+        while (j < N) {
+            cin >> temp;
+            a[j + N].first = temp;
+            a[j + N].second = -1;
+            j++;
+        }
+        sort(a, a + N + N);
+        cout << "Case #" << i << ": ";
+        cout << deceitfulWar(a, N + N) << " ";
+        cout << war(a, N + N) << "\n";
+    }
+    
+    return 0;
 }
 
 /*
@@ -99,4 +101,4 @@ Case #1: 0 0
 Case #2: 1 0
 Case #3: 2 1
 Case #4: 8 4
-*/
+ */
