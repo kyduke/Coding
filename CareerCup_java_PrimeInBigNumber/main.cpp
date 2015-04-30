@@ -4,8 +4,9 @@
 using namespace std;
 
 void primeInBigNumber() {
-	long long a, b, c, i, j, r, s, sum;
-	int primes[100001] = {0, };
+	long long a, b, f, i, j, r, s, sum;
+	int* seeds;
+	int* primes;
 
 	/*
 	a = 1000000000000;
@@ -19,14 +20,32 @@ void primeInBigNumber() {
 	r = 1000;
 	s = 100;
 
+	seeds = new int[1000001];
+	memset(seeds, 0, sizeof(int) * 1000001);
+
+	primes = new int[100001];
+	memset(primes, 0, sizeof(int) * 100001);
+
 	for (i = 2; i <= r; i++) {
-		for (j = 0; j <= s; j++) {
-			if (primes[j] == 0) {
-				c = a + j;
-				if (c % i == 0) {
-					primes[j] = 1;
-				}
+		if (seeds[i] == 1) continue;
+		for (j = i + i; j <= r; j = j + i) {
+			seeds[j] = 1;
+		}
+	}
+
+	for (i = 2; i <= r; i++) {
+		if (seeds[i] == 1) continue;
+		f = -1;
+		for (j = a; j <= b; j++) {
+			if (j % i == 0) {
+				f = j;
+				break;
 			}
+		}
+		if (f == -1) continue;
+
+		for (j = f; j <= b; j = j + i) {
+			primes[j - a] = 1;
 		}
 	}
 
@@ -36,6 +55,9 @@ void primeInBigNumber() {
 			sum += a + j;
 		}
 	}
+
+	delete[] seeds;
+	delete[] primes;
 
 	cout << sum << "\n";
 }
