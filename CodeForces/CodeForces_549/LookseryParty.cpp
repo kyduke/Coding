@@ -11,42 +11,42 @@ int targets[100];
 
 void solve() {
     int i, c;
-	int employees[100] = {0, };
-	vector<int> present;
+    int employees[100] = {0, };
+    vector<int> present;
 
-	c = -1;
-	for (i = 0; i < n; i++) {
-		if (targets[i] == 0) {
-			c = i;
-			break;
-		}
-	}
+    c = -1;
+    for (i = 0; i < n; i++) {
+        if (targets[i] == 0) {
+            c = i;
+            break;
+        }
+    }
 
-	if (c == -1) {
-		cout << "0\n\n";
-		return;
-	}
+    if (c == -1) {
+        cout << "0\n\n";
+        return;
+    }
 
-	while (c >= 0) {
-		employees[c] = 1;
-		present.push_back(c + 1);
-		for (i = 0; i < n; i++) {
-			targets[i] -= contacts[c][i];
-		}
-		c = -1;
-		for (i = 0; i < n; i++) {
-			if (employees[i] == 0 && targets[i] == 0) {
-				c = i;
-				break;
-			}
-		}
-	}
+    while (c >= 0) {
+        employees[c] = 1;
+        present.push_back(c + 1);
+        for (i = 0; i < n; i++) {
+            targets[i] -= contacts[c][i];
+        }
+        c = -1;
+        for (i = 0; i < n; i++) {
+            if (employees[i] == 0 && targets[i] == 0) {
+                c = i;
+                break;
+            }
+        }
+    }
 
-	cout << present.size() << "\n";
-	for (i = 0; i < present.size(); i++) {
-		cout << present[i] << " ";
-	}
-	cout << "\n";
+    cout << present.size() << "\n";
+    for (i = 0; i < present.size(); i++) {
+        cout << present[i] << " ";
+    }
+    cout << "\n";
 }
 
 int main(int argc, char* argv[]) {
@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
     while (i < n) {
         cin >> buffer;
         for (j = 0; j < n; j++) {
-			contacts[i][j] = (int)(buffer[j] - '0');
+            contacts[i][j] = (int)(buffer[j] - '0');
         }
         i++;
     }
@@ -83,7 +83,7 @@ int main(int argc, char* argv[]) {
 0 1 2
 =====
 1
-1 
+1
 
 1
 1
@@ -100,5 +100,5 @@ int main(int argc, char* argv[]) {
 1 0 1 0
 =====
 4
-1 2 3 4 
+1 2 3 4
 */
