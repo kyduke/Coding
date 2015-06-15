@@ -10,7 +10,7 @@ using namespace std;
 
 int n;
 int cacheLen[501];
-int cacheCnt[501];
+long long cacheCnt[501];
 int S[501];
 
 int lis(int start) {
@@ -27,16 +27,16 @@ int lis(int start) {
 	return ret;
 }
 
-int count(int start) {
+long long count(int start) {
 	if (lis(start) == 1) return 1;
 
-	int& ret = cacheCnt[start + 1];
+	long long& ret = cacheCnt[start + 1];
 	if (ret != -1) return ret;
 
 	ret = 0;
 	for (int next = start + 1; next < n; next++) {
 		if ((start == -1 || S[start] < S[next]) && lis(start) == lis(next) + 1) {
-			ret = min<long long>(2147483647, (long long)ret + count(next));
+			ret = min<long long>(2147483647, ret + count(next));
 		}
 	}
 
@@ -56,7 +56,7 @@ void reconstruct(int start, int skip, vector<int>& result) {
 
 	for (int i = 0; i < followers.size(); i++) {
 		int idx = followers[i].second;
-		int cnt = count(idx);
+		long long cnt = count(idx);
 		if (cnt <= skip) {
 			skip -= cnt;
 		} else {
