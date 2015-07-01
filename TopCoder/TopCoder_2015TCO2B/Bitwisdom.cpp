@@ -8,33 +8,22 @@ using namespace std;
 class Bitwisdom {
 private:
 	int flipCount(vector<int>& bits) {
-		int i, left, right;
+		int i, c, n;
 
-		left = 0;
+		c = 0;
+		n = bits[0];
 		for (i = 0; i < bits.size(); i++) {
-			if (bits[i] == 1) {
-				if (i == 0 || bits[i - 1] == 0) {
-					left++;
-				}
-				if (i + 1 < bits.size() && bits[i + 1] == 0) {
-					left++;
-				}
+			if (n != bits[i]) {
+				c++;
+				n = bits[i];
 			}
 		}
 
-		right = 0;
-		for (i = bits.size() - 1; i >= 0; i--) {
-			if (bits[i] == 1) {
-				if (i == bits.size() - 1 || bits[i + 1] == 0) {
-					right++;
-				}
-				if (i - 1 >= 0 && bits[i - 1] == 0) {
-					right++;
-				}
-			}
+		if (c == 0 && n == 1) {
+			c = 1;
 		}
 
-		return min(left, right);
+		return c;
 	};
 	double calc(int start, double chance, vector<int>& p, vector<int>& bits) {
 		double result;
