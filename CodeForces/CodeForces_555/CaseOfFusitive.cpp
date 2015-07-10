@@ -1,5 +1,6 @@
 // http://codeforces.com/problemset/problem/555/B
 // Time limit exceeded on test 12
+// success solution: https://asdfcoding.wordpress.com/2015/06/30/555b-case-of-fugitive-codeforces/
 
 #include <iostream>
 #include <set>
