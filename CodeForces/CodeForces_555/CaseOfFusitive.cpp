@@ -1,78 +1,50 @@
 // http://codeforces.com/problemset/problem/555/B
-// Time limit exceeded on test 12
-// success solution: https://asdfcoding.wordpress.com/2015/06/30/555b-case-of-fugitive-codeforces/
 
 #include <iostream>
+#include <vector>
 #include <set>
+#include <algorithm>
 
 using namespace std;
 
+typedef pair<pair<unsigned long long, unsigned long long>, int> island;
+typedef pair<unsigned long long, int> bridge;
+
 const int SIZE = 200000;
 
-unsigned long long starts[SIZE];
-unsigned long long endes[SIZE];
-unsigned long long bridges[SIZE];
+vector<island> islands;
+multiset<bridge> bridges;
 int results[SIZE] = {0, };
-int nexts[SIZE] = {0, };
 int n, m;
 
+bool sortIslandsDESC (island a, island b) {
+	return (a.first.second < b.first.second);
+}
+
 bool useBridges() {
-    int i, idx, next, direction;
-    unsigned long long start, end;
-    set<int> visits;
-    set<int>::iterator it;
+	int i, idx;
+	unsigned long long start, end;
+	multiset<bridge>::iterator it;
 
-    for (i = 0; i < m; i++) {
-        visits.insert(i);
-    }
-
-    direction = 1;
-    idx = 0;
-    while (idx >= 0) {
-        start = starts[idx];
-        end = endes[idx];
-
-        if (direction == -1) {
-            visits.insert(nexts[idx] - 1);
+	sort(islands.begin(), islands.end(), sortIslandsDESC);
+	for (i = 0; i < islands.size(); i++) {
+		idx = islands[i].second;
+		start = islands[i].first.first;
+		end = islands[i].first.second;
+		it = bridges.lower_bound(make_pair(start, 0));
+        if (it == bridges.end() || it->first > end) {
+            return false;
         }
+		results[idx] = it->second;
+		bridges.erase(it);
+	}
 
-        direction = -1;
-
-        next = nexts[idx];
-        it = visits.find(next);
-        if (it == visits.end()) {
-            it = visits.begin();
-            while (it != visits.end()) {
-                if (*it > next) {
-                    break;
-                }
-                it++;
-            }
-        }
-        while (it != visits.end()) {
-            i = *it;
-            if (bridges[i] >= start && bridges[i] <= end) {
-                nexts[idx] = i + 1;
-                visits.erase(i);
-                results[idx] = i + 1;
-                direction = 1;
-                break;
-            }
-            it++;
-        }
-
-        idx += direction;
-        if (idx == n) {
-            return true;
-        }
-    }
-
-    return false;
+    return true;
 }
 
 int main(int argc, char* argv[]) {
     int i;
-    unsigned long long left, right, prevLeft, prevRight;
+    unsigned long long left, right, prevLeft, prevRight, t;
 
     scanf("%d %d", &n, &m);
 
@@ -82,8 +54,7 @@ int main(int argc, char* argv[]) {
     n--;
     while (i < n) {
         scanf("%I64d %I64d", &left, &right);
-        starts[i] = left - prevRight;
-        endes[i] = right - prevLeft;
+		islands.push_back(make_pair(make_pair(left - prevRight, right - prevLeft), i));
         prevLeft = left;
         prevRight = right;
         i++;
@@ -91,7 +62,8 @@ int main(int argc, char* argv[]) {
 
     i = 0;
     while (i < m) {
-        scanf("%I64d", &bridges[i++]);
+        scanf("%I64d", &t);
+		bridges.insert(make_pair(t, ++i));
     }
 
     if (n <= m && useBridges() == true) {
