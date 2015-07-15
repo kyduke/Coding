@@ -3,18 +3,19 @@
 
 #include <iostream>
 #include <vector>
+#include <map>
 #include <set>
 
 using namespace std;
 
 const int LIMIT = 10000000;
 
-multiset<int> nums;
+map<int, int> nums;
 int counts[LIMIT] = {0, };
 int moves[LIMIT] = {0, };
 int limit;
 
-void fillCountAndMove(int a) {
+void fillCountAndMove(int a, int n) {
 	int i, j, move;
 	set<int> visit;
 
@@ -24,8 +25,9 @@ void fillCountAndMove(int a) {
 		for (i = a; i < limit; i *= 2) {
 			if (visit.find(i) != visit.end()) break;
 			visit.insert(i);
-			counts[i]++;
-			moves[i] += j++;
+			counts[i] += n;
+			moves[i] += (j * n);
+			j++;
 		}
 		a /= 2;
 	}
@@ -33,12 +35,12 @@ void fillCountAndMove(int a) {
 
 int getMinimumOperations(int n) {
 	int i, result;
-	multiset<int>::iterator it;
+	map<int, int>::iterator it;
 
-	limit = *(nums.rbegin()) + 1;
+	limit = nums.rbegin()->first + 1;
 
 	for (it = nums.begin(); it != nums.end(); it++) {
-		fillCountAndMove(*it);
+		fillCountAndMove(it->first, it->second);
 	}
 
 	result = LIMIT;
@@ -53,12 +55,18 @@ int getMinimumOperations(int n) {
 
 int main(int argc, char* argv[]) {
 	int n, i, a;
+	map<int, int>::iterator it;
 
 	cin >> n;
 	i = 0;
 	while (i < n) {
 		cin >> a;
-		nums.insert(a);
+		it = nums.find(a);
+		if (it == nums.end()) {
+			nums.insert(make_pair(a, 1));
+		} else {
+			it->second++;
+		}
 		i++;
 	}
 
