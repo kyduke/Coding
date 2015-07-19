@@ -1,3 +1,5 @@
+// http://www.codewars.com/kata/52ea928a1ef5cfec800003ee
+
 function ipToInt32(ip){
   var arr, result, i;
   var D2H = function(n) {
