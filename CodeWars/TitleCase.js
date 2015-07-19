@@ -1,3 +1,5 @@
+// http://www.codewars.com/kata/5202ef17a402dd033c000009
+
 function titleCase(title, minorWords) {
     var titleArray, minorArray, i;
     
