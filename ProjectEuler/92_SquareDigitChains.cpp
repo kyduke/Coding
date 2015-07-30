@@ -13,7 +13,7 @@ set<int> hit;
 
 int getSquareDigitChain(int n) {
 	int x, sum, temp;
-
+	int num[10] = {0, };
 	
 	if (n < CACHE_MAX && squares[n] != 0) {
 		return squares[n];
@@ -25,6 +25,22 @@ int getSquareDigitChain(int n) {
 		temp = x % 10;
 		sum += temp * temp;
 		x /= 10;
+	}
+
+	x = sum;
+	while (x) {
+		temp = x % 10;
+		num[temp]++;
+		x /= 10;
+	}
+
+	// 150 -> 15
+	sum = 0;
+	for (x = 1; x < 10; x++) {
+		while (num[x]) {
+			sum = sum * 10 + x;
+			num[x]--;
+		}
 	}
 
 	if (n < CACHE_MAX) {
