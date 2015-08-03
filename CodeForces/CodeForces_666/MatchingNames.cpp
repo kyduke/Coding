@@ -1,4 +1,5 @@
 // http://codeforces.com/problemset/problem/566/A
+// editorial: http://codeforces.com/blog/entry/19518
 
 #include <iostream>
 #include <string.h>
