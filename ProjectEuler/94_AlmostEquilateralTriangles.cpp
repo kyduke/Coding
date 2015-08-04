@@ -1,6 +1,3 @@
-// http://projecteuler.net/problem=94
-// http://www.mathblog.dk/project-euler-94-almost-equilateral-triangles/
-
 #include <iostream>
 #include <math.h>
 
@@ -59,7 +56,7 @@ void mathblogSolution() {
 }
 
 int main(int argc, char* argv[]) {
-	unsigned long long a, b, aa, b2, sumOfPerimeters;
+	unsigned long long a, b, aa, b2, aab2, cc, sumOfPerimeters;
 	double c;
 
 	sumOfPerimeters = 0;
@@ -67,8 +64,10 @@ int main(int argc, char* argv[]) {
 		aa = a * a;
 		for (b = a - 1; b <= a + 1; b += 2) {
 			b2 = b / 2;
-			c = sqrt((double)(aa - b2 * b2));
-			if (c == (int)c) {
+			aab2 = aa - b2 * b2;
+			c = sqrt((double)aab2);
+			cc = (unsigned long long)c * (unsigned long long)c;
+			if (aab2 == cc) {
 				sumOfPerimeters += a + a + b;
 				cout << a << ", " << b << ", " << (unsigned long long)c << "\n";
 			}
