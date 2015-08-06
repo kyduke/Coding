@@ -1,3 +1,5 @@
+// http://codeforces.com/problemset/problem/567/A
+
 #include <iostream>
 #include <vector>
 
@@ -28,3 +30,19 @@ int main(int argc, char* argv[]) {
 
 	return 0;
 }
+
+/*
+4
+-5 -2 2 7
+=====
+3 12
+3 9
+4 7
+5 12
+
+2
+-1 1
+=====
+2 2
+2 2
+*/
