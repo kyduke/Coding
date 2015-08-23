@@ -1,32 +1,80 @@
 //LGE CodeJam 2015 Problem2
-//√§¡°¿∫ Ω«∆–«‘
+//Ï±ÑÏ†êÏùÄ Ïã§Ìå®Ìï®
 
 #include <iostream>
 #include <fstream>
-#include <set>
+#include <map>
 
 using namespace std;
 
-multiset<int> walls;
+multimap<int, int> walls;
 int N, K, W;
 
 bool solve() {
-	multiset<int>::iterator it, upper;
-	int i;
+	multimap<int, int>::iterator it, wall;
+	int i, j, limit, minX, maxX;
+	bool minChanged, maxChanged;
+
+	it = walls.begin();
 
 	i = 0;
-	for (it = walls.begin(); it != walls.end(); it++) {
-		if (i > K) break;
+	while (i <= K) {
+		limit = it->first + W;
+		wall = it;
+		minX = 2000000001;
+		maxX = -2000000001;
+		while (wall != walls.end()) {
+			if (wall->first > limit) {
+				break;
+			}
+			minX = min(minX, wall->second);
+			maxX = max(maxX, wall->second);
+			wall++;
+		}
 
-		upper = walls.upper_bound(*it + W);
-		if (upper == walls.end()) return true;
+		minChanged = false;
+		maxChanged = false;
 
-		upper = walls.upper_bound(*upper + W);
-		if (upper == walls.end()) return true;
+		while (wall != walls.end()) {
+			if (wall->second < minX) {
+				if (minChanged == false) {
+					minChanged = true;
+					minX = wall->second;
+				} else {
+					break;
+				}
+			} else if (wall->second > maxX) {
+				if (maxChanged == false) {
+					maxChanged = true;
+					maxX = wall->second;
+				} else {
+					break;
+				}
+			} else if (wall->second > minX && wall->second < maxX) {
+				break;
+			}
 
-		if (distance(it, upper) + K >= walls.size()) return true;
-		
+			wall++;
+		}
+
+		limit = wall->first + W;
+		wall++;
+		while (wall != walls.end()) {
+			if (wall->second < minX || wall->second > maxX) {
+				break;
+			}
+			if (wall->first > limit) {
+				break;
+			}
+			wall++;
+		}
+
+		j = distance(wall, walls.end());
+
+		if (i + j <= K) return true;
+
 		i++;
+		it++;
 	}
 
 	return false;
@@ -48,7 +96,7 @@ int main(int argc, char* argv[]) {
 			n = N;
 			while (n--) {
 				dataFile >> x >> y;
-				walls.insert(y);
+				walls.insert(make_pair(y, x));
 			}
 
 			if (solve() == true) {
@@ -67,7 +115,7 @@ int main(int argc, char* argv[]) {
 			n = N;
 			while (n--) {
 				cin >> x >> y;
-				walls.insert(y);
+				walls.insert(make_pair(y, x));
 			}
 
 			if (solve() == true) {
