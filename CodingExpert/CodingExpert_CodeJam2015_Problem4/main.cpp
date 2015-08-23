@@ -1,24 +1,26 @@
 //LGE CodeJam 2015 Problem4
-//¶óÁö´Â ½Ã°£ÃÊ°ú
+//ë¼ì§€ëŠ” ì‹œê°„ì´ˆê³¼
 
 #include <iostream>
 #include <fstream>
-#include <map>
 #include <set>
 #include <vector>
 #include <algorithm>
 
 using namespace std;
 
-map<int, set<int>> rooms;
+struct Room {
+	bool visit;
+	set<int> friends;
+};
+
+Room rooms[500001];
 int N, K;
 int minDist, midRoom;
 
 void findRoom(vector<int>& route, int target) {
 	int last;
-	map<int, set<int>>::iterator it;
-	set<int>::iterator friendsIt;
-	vector<int>::iterator routeIt;
+	set<int>::iterator it;
 
 	last = route[route.size() - 1];
 
@@ -32,16 +34,14 @@ void findRoom(vector<int>& route, int target) {
 		return;
 	}
 
-	it = rooms.find(last);
-	if (it == rooms.end()) return;
+	for (it = rooms[last].friends.begin(); it != rooms[last].friends.end(); it++) {
+		if (rooms[*it].visit == true) continue;
 
-	for (friendsIt = it->second.begin(); friendsIt != it->second.end(); friendsIt++) {
-		routeIt = find(route.begin(), route.end(), *friendsIt);
-		if (routeIt != route.end()) continue;
-
-		route.push_back(*friendsIt);
+		rooms[*it].visit = true;
+		route.push_back(*it);
 		findRoom(route, target);
 		route.pop_back();
+		rooms[*it].visit = false;
 	}
 }
 
@@ -49,6 +49,8 @@ void solve(int a, int b) {
 	vector<int> route;
 
 	minDist = 500001;
+
+	rooms[a].visit = true;
 
 	route.push_back(a);
 	findRoom(route, b);
@@ -59,8 +61,6 @@ int main(int argc, char* argv[]) {
 	int T;
 	int n;
 	int a, b;
-	map<int, set<int>>::iterator it;
-	set<int> friends;
 
 	if (argc > 1) {
 		dataFile.open(argv[1]);
@@ -68,28 +68,16 @@ int main(int argc, char* argv[]) {
 		while (T--) {
 			dataFile >> N >> K;
 
-			rooms.clear();
+			for (n = 0; n <= N; n++) {
+				rooms[n].visit = false;
+				rooms[n].friends.clear();
+			}
+
 			n = N - 1;
 			while (n--) {
 				dataFile >> a >> b;
-
-				it = rooms.find(a);
-				if (it == rooms.end()) {
-					friends.clear();
-					friends.insert(b);
-					rooms.insert(make_pair(a, friends));
-				} else {
-					it->second.insert(b);
-				}
-
-				it = rooms.find(b);
-				if (it == rooms.end()) {
-					friends.clear();
-					friends.insert(a);
-					rooms.insert(make_pair(b, friends));
-				} else {
-					it->second.insert(a);
-				}
+				rooms[a].friends.insert(b);
+				rooms[b].friends.insert(a);
 			}
 			n = K;
 			while (n--) {
@@ -104,28 +92,16 @@ int main(int argc, char* argv[]) {
 		while (T--) {
 			cin >> N >> K;
 
-			rooms.clear();
+			for (n = 0; n <= N; n++) {
+				rooms[n].visit = false;
+				rooms[n].friends.clear();
+			}
+
 			n = N - 1;
 			while (n--) {
 				cin >> a >> b;
-
-				it = rooms.find(a);
-				if (it == rooms.end()) {
-					friends.clear();
-					friends.insert(b);
-					rooms.insert(make_pair(a, friends));
-				} else {
-					it->second.insert(b);
-				}
-
-				it = rooms.find(b);
-				if (it == rooms.end()) {
-					friends.clear();
-					friends.insert(a);
-					rooms.insert(make_pair(b, friends));
-				} else {
-					it->second.insert(a);
-				}
+				rooms[a].friends.insert(b);
+				rooms[b].friends.insert(a);
 			}
 			n = K;
 			while (n--) {
