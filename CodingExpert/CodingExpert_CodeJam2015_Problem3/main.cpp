@@ -1,5 +1,5 @@
 //LGE CodeJam 2015 Problem3
-//brute force ½º¸ô¸¸ Åë°ú
+//brute force ìŠ¤ëª°ë§Œ í†µê³¼
 
 #include <iostream>
 #include <fstream>
