@@ -1,80 +1,52 @@
 //LGE CodeJam 2015 Problem2
-//채점은 실패함
+//라지만 성공함
 
 #include <iostream>
 #include <fstream>
-#include <map>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
-multimap<int, int> walls;
+vector<pair<int, int>> walls;
 int N, K, W;
 
 bool solve() {
-	multimap<int, int>::iterator it, wall;
-	int i, j, limit, minX, maxX;
-	bool minChanged, maxChanged;
+	int i, j, k, limit, lastY, minX, maxX;
+	bool failed;
 
-	it = walls.begin();
+	sort(walls.begin(), walls.end());
 
-	i = 0;
-	while (i <= K) {
-		limit = it->first + W;
-		wall = it;
+	for (i = 0; i <= K; i++) {
 		minX = 2000000001;
 		maxX = -2000000001;
-		while (wall != walls.end()) {
-			if (wall->first > limit) {
-				break;
-			}
-			minX = min(minX, wall->second);
-			maxX = max(maxX, wall->second);
-			wall++;
+		for (j = 0; j < N - K; j++) {
+			minX = min(minX, walls[i + j].second);
+			maxX = max(maxX, walls[i + j].second);
 		}
 
-		minChanged = false;
-		maxChanged = false;
-
-		while (wall != walls.end()) {
-			if (wall->second < minX) {
-				if (minChanged == false) {
-					minChanged = true;
-					minX = wall->second;
-				} else {
-					break;
-				}
-			} else if (wall->second > maxX) {
-				if (maxChanged == false) {
-					maxChanged = true;
-					maxX = wall->second;
-				} else {
-					break;
-				}
-			} else if (wall->second > minX && wall->second < maxX) {
-				break;
-			}
-
-			wall++;
+		limit = walls[i].first + W;
+		for (j = 0; j < N - K; j++) {
+			if (walls[i + j].first > limit) break;
 		}
 
-		limit = wall->first + W;
-		wall++;
-		while (wall != walls.end()) {
-			if (wall->second < minX || wall->second > maxX) {
-				break;
-			}
-			if (wall->first > limit) {
-				break;
-			}
-			wall++;
+		limit = walls[i + N - K - 1].first - W;
+		for (k = N - K - 1; k >= 0; k--) {
+			if (walls[i + k].first < limit) break;
 		}
 
-		j = distance(wall, walls.end());
+		failed = false;
+		for (; j <= k; j++) {
+			if (walls[i + j].second < minX || walls[i + j].second > maxX) {
+				failed = true;
+				break;
+			} else if (walls[i + j].second > minX + W && walls[i + j].second < maxX - W) {
+				failed = true;
+				break;
+			}
+		}
 
-		if (i + j <= K) return true;
-
-		i++;
-		it++;
+		if (failed == false) return true;
 	}
 
 	return false;
@@ -96,7 +68,7 @@ int main(int argc, char* argv[]) {
 			n = N;
 			while (n--) {
 				dataFile >> x >> y;
-				walls.insert(make_pair(y, x));
+				walls.push_back(make_pair(y, x));
 			}
 
 			if (solve() == true) {
@@ -115,7 +87,7 @@ int main(int argc, char* argv[]) {
 			n = N;
 			while (n--) {
 				cin >> x >> y;
-				walls.insert(make_pair(y, x));
+				walls.push_back(make_pair(y, x));
 			}
 
 			if (solve() == true) {
