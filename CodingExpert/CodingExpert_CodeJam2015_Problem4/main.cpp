@@ -54,6 +54,9 @@ void solve(int a, int b) {
 
 	route.push_back(a);
 	findRoom(route, b);
+	route.pop_back();
+
+	rooms[a].visit = false;
 }
 
 int main(int argc, char* argv[]) {
