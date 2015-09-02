@@ -75,11 +75,10 @@ public:
 int main(int argc, char* argv[]) {
 	Solution s;
 
-	//cout << s.numberToWords(0) << "\n";
-	cout << s.numberToWords(100000) << "\n";
-	//cout << s.numberToWords(123) << "\n";
-	//cout << s.numberToWords(12345) << "\n";
-	//cout << s.numberToWords(1234567) << "\n";
+	cout << s.numberToWords(0) << "\n";
+	cout << s.numberToWords(123) << "\n";
+	cout << s.numberToWords(12345) << "\n";
+	cout << s.numberToWords(1234567) << "\n";
 
 	return 0;
 }
