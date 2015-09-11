@@ -20,7 +20,7 @@ public:
 				result = n / i + numSquares(n % i);;
 			} else {
 				t = n / i;
-				if (result < t + 1) break;
+				if (result <= t) break;
 				t +=  + numSquares(n % i);
 				result = min(result, t);
 			}
