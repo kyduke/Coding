@@ -12,10 +12,11 @@ void initPrime(int a) {
 	int i, j, l;
 	bool p;
 
-	l = (int)sqrt((double)a);
 	for (i = 2; i <= a; i++) {
+		l = (int)sqrt((double)i);
 		p = true;
 		for (j = 0; j < primes.size(); j++) {
+			if (l < primes[j]) break;
 			if (i % primes[j] == 0) {
 				p = false;
 				break;
