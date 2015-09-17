@@ -1,6 +1,29 @@
 // http://codeforces.com/problemset/problem/578/A
 // http://codeforces.com/blog/entry/20368
 
+/*
+#include <iostream>
+#include <stdio.h>
+
+using namespace std;
+
+int main(int argc, char* argv[]){
+    int a, b;
+	double result;
+
+    cin >> a >> b;
+
+    if (a < b) {
+		printf("-1\n");
+	} else {
+		result = (a + b) / (2.0 * ((a + b) / (2 * b)));
+		printf("%0.12f\n", result);
+	}
+		
+    return 0;
+}
+*/
+
 #include <iostream>
 #include <stdio.h>
 
