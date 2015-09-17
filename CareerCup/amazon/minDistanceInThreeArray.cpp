@@ -9,6 +9,18 @@ using namespace std;
 
 const int MAX_INTEGER = 2147483646;
 
+void compareDistance(int& a, int& b, int& c, int& minDistance, int A, int B, int C) {
+	int t;
+
+	t = abs(A - B) + abs(B - C) + abs(C - A);
+	if (t < minDistance) {
+		minDistance = t;
+		a = A;
+		b = B;
+		c = C;
+	}
+}
+
 void findMinDistanceInThreeArray(vector<int>& A, vector<int>& B, vector<int>& C) {
 	int minDistance, t;
 	int a, b, c;
@@ -76,83 +88,19 @@ void findMinDistanceInThreeArray(vector<int>& A, vector<int>& B, vector<int>& C)
 			c = C[k];
 			break;
 		} else if (foundEqualB) {
-			if (foundSmallC) {
-				t = abs(A[i] - B[j]) + abs(B[j] - C[k]) + abs(C[k] - A[i]);
-				if (t < minDistance) {
-					minDistance = t;
-					a = A[i];
-					b = B[j];
-					c = C[k];
-				}
-			}
-			if (foundBigC) {
-				t = abs(A[i] - B[j]) + abs(B[j] - C[k + 1]) + abs(C[k + 1] - A[i]);
-				if (t < minDistance) {
-					minDistance = t;
-					a = A[i];
-					b = B[j];
-					c = C[k + 1];
-				}
-			}
+			if (foundSmallC) compareDistance(a, b, c, minDistance, A[i], B[j], C[k]);
+			if (foundBigC) compareDistance(a, b, c, minDistance, A[i], B[j], C[k + 1]);
 		} else if (foundEqualC) {
-			if (foundSmallB) {
-				t = abs(A[i] - B[j]) + abs(B[j] - C[k]) + abs(C[k] - A[i]);
-				if (t < minDistance) {
-					minDistance = t;
-					a = A[i];
-					b = B[j];
-					c = C[k];
-				}
-			}
-			if (foundBigB) {
-				t = abs(A[i] - B[j + 1]) + abs(B[j + 1] - C[k]) + abs(C[k] - A[i]);
-				if (t < minDistance) {
-					minDistance = t;
-					a = A[i];
-					b = B[j + 1];
-					c = C[k];
-				}
-			}
+			if (foundSmallB) compareDistance(a, b, c, minDistance, A[i], B[j], C[k]);
+			if (foundBigB) compareDistance(a, b, c, minDistance, A[i], B[j + 1], C[k]);
 		} else {
 			if (foundSmallB) {
-				if (foundSmallC) {
-					t = abs(A[i] - B[j]) + abs(B[j] - C[k]) + abs(C[k] - A[i]);
-					if (t < minDistance) {
-						minDistance = t;
-						a = A[i];
-						b = B[j];
-						c = C[k];
-					}
-				}
-				if (foundBigC) {
-					t = abs(A[i] - B[j]) + abs(B[j] - C[k + 1]) + abs(C[k + 1] - A[i]);
-					if (t < minDistance) {
-						minDistance = t;
-						a = A[i];
-						b = B[j];
-						c = C[k + 1];
-					}
-				}
+				if (foundSmallC) compareDistance(a, b, c, minDistance, A[i], B[j], C[k]);
+				if (foundBigC) compareDistance(a, b, c, minDistance, A[i], B[j], C[k + 1]);
 			}
 			if (foundBigB) {
-				if (foundSmallC) {
-					t = abs(A[i] - B[j + 1]) + abs(B[j + 1] - C[k]) + abs(C[k] - A[i]);
-					if (t < minDistance) {
-						minDistance = t;
-						a = A[i];
-						b = B[j + 1];
-						c = C[k];
-					}
-				}
-				if (foundBigC) {
-					t = abs(A[i] - B[j + 1]) + abs(B[j + 1] - C[k + 1]) + abs(C[k + 1] - A[i]);
-					if (t < minDistance) {
-						minDistance = t;
-						a = A[i];
-						b = B[j + 1];
-						c = C[k + 1];
-					}
-				}
+				if (foundSmallC) compareDistance(a, b, c, minDistance, A[i], B[j + 1], C[k]);
+				if (foundBigC) compareDistance(a, b, c, minDistance, A[i], B[j + 1], C[k + 1]);
 			}
 		}
 	}
@@ -194,6 +142,23 @@ int main(int argc, char* argv[]) {
 	C.push_back(300);
 	C.push_back(120);
 	C.push_back(200);
+
+	findMinDistanceInThreeArray(A, B, C);
+
+	A.clear();
+	A.push_back(10);
+	A.push_back(15);
+	A.push_back(20);
+
+	B.clear();
+	B.push_back(5);
+	B.push_back(10);
+	B.push_back(25);
+
+	C.clear();
+	C.push_back(3);
+	C.push_back(5);
+	C.push_back(15);
 
 	findMinDistanceInThreeArray(A, B, C);
 
