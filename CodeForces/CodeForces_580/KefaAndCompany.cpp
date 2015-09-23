@@ -22,7 +22,7 @@ UINT64 getMaximumFriendship() {
 	startIndex = 0;
 	for (i = 0; i < companies.size(); i++) {
 		limit = companies[i].first - d;
-		while (companies[startIndex].first < limit) {
+		while (companies[startIndex].first <= limit) {
 			currentSum -= companies[startIndex].second;
 			startIndex++;
 		}
