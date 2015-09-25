@@ -7,27 +7,27 @@ using namespace std;
 class Solution {
 public:
     int countDigitOne(int n) {
-        int depth, length, current, under;
-		int result;
+        long long depth, length, current, under;
+	long long result;
 
-		result = 0;
+	result = 0;
 
-		depth = 1;
-		length = 0;
-		while (n / depth) {
-			under = n % depth;
-			current = (n % (depth * 10)) / depth;
-			if (current == 1) {
-				result += under + 1;
-			} else if (current > 1) {
-				result += depth;
-			}
-			result += current * length * (depth / 10);
-			depth *= 10;
-			length++;
+	depth = 1;
+	length = 0;
+	while (n / depth) {
+		under = n % depth;
+		current = (n % (depth * 10)) / depth;
+		if (current == 1) {
+			result += under + 1;
+		} else if (current > 1) {
+			result += depth;
 		}
+		result += current * length * (depth / 10);
+		depth *= 10;
+		length++;
+	}
 
-		return result;
+	return result;
     }
 };
 
