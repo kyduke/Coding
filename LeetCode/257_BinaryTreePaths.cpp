@@ -20,6 +20,8 @@ private:
 		string str;
 		string table[10] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
 		int sign;
+		
+		if (n == 0) return "0";
 
 		sign = 1;
 		if (n < 0) {
