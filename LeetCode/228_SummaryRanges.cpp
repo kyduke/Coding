@@ -7,31 +7,55 @@
 using namespace std;
 
 class Solution {
-public:
-    vector<string> summaryRanges(vector<int>& nums) {
-        vector<string> ranges;
+private:
+	string integerToString(long long n) {
 		string str;
-		char buffer[64];
-		int from, to, i;
-
+		string table[10] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
+		int sign;
+		
+		if (n == 0) return "0";
+	
+		sign = 1;
+		if (n < 0) {
+			sign = -1;
+			n = -n;
+		}
+	
+		str = "";
+		while (n) {
+			str = table[n % 10] + str;
+			n /= 10;
+		}
+	
+		if (sign == -1) {
+			str = "-" + str;
+		}
+	
+		return str;
+	}
+public:
+	vector<string> summaryRanges(vector<int>& nums) {
+	        vector<string> ranges;
+		string str;
+		int i;
+		long long from, to;
+	
 		if (nums.size() == 0) return ranges;
-
+	
 		from = nums[0];
 		to = from;
 		for (i = 0; i < nums.size(); i++) {
 			if (from >= to) {
 				from = nums[i];
 				to = from + 1;
-				itoa(from, buffer, 10);
-				str.append(buffer);
+				str.append(integerToString(from));
 			} else {
 				if (to == nums[i]) {
 					to++;
 				} else {
 					if (from + 1 < to) {
 						str.append("->");
-						itoa(to - 1, buffer, 10);
-						str.append(buffer);
+						str.append(integerToString(to - 1));
 					}
 					ranges.push_back(str);
 					str.clear();
@@ -40,18 +64,17 @@ public:
 				}
 			}
 		}
-
+	
 		if (from < to) {
 			if (from + 1 < to) {
 				str.append("->");
-				itoa(to - 1, buffer, 10);
-				str.append(buffer);
+				str.append(integerToString(to - 1));
 			}
 			ranges.push_back(str);
 		}
-
+	
 		return ranges;
-    }
+	}
 };
 
 int main(int argc, char* argv[]) {
