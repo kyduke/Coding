@@ -9,33 +9,39 @@ class Solution {
 public:
     vector<int> majorityElement(vector<int>& nums) {
         vector<int> result;
-		int n;
-		int i, j, c;
+	int n;
+	int i, j, c, n3;
+	
+	if (nums.size() == 0) return result;
 
-		n = nums[0] - 1;
-		j = 0;
+        n3 = nums.size() / 3;
+	n = 0;
+	j = 0;
+	while (j < nums.size()) {
 		while (j < nums.size()) {
-			while (j < nums.size()) {
-				if (n != nums[j]) {
-					n = nums[j];
-					c = 1;
-					break;
-				}
+			if (find(result.begin(), result.end(), nums[j]) == result.end()) {
+				n = nums[j];
+				c = 1;
 				j++;
+				break;
 			}
-
-			for (i = j + 1; i < nums.size(); i++) {
-				if (n == nums[i]) {
-					c++;
-					if (c > nums.size() / 3) {
-						result.push_back(n);
-						break;
-					}
-				}
-			}
+			c = 0;
+			j++;
 		}
 
-		return result;
+		for (i = j; i < nums.size(); i++) {
+			if (n == nums[i]) {
+				c++;
+				if (c > n3) break;
+			}
+		}
+		
+		if (c > n3) {
+		    result.push_back(n);
+		}
+	}
+
+	return result;
     }
 };
 
