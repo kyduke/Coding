@@ -1,157 +1,97 @@
+//
+//  main.cpp
+//  LeetCode_227_BasicCalculatorII
+//
+//  Created by Youngduke Koh on 9/28/15.
+//  Copyright © 2015 Youngduke Koh. All rights reserved.
+//
+
 // https://leetcode.com/problems/basic-calculator-ii/
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 using namespace std;
-
-enum State {
-	NUMBER_A,
-	OPERATOR,
-	NUMBER_B,
-	NEXT_OPERATOR,
-	NEXT_NUMBER
-};
-
-enum Operation {
-	PLUS,
-	MINUS,
-	MULTIPLY,
-	DIVIDE
-};
 
 class Solution {
 public:
     int calculate(string s) {
-		State state;
-		int a, b, nextNum, next;
-		Operation op, nextOp, next2;
-		int index, length;
-		char c;
+        char c;
+        int i, n;
+        vector<int> nums;
+        vector<char> ops;
+        vector<int>::iterator it;
+        vector<char>::iterator opIt;
+        
+        n = 0;
+        i = 0;
+        while (i < s.size()) {
+            c = s[i];
+            if (c == '+' || c == '-' || c == '*' || c == '/') {
+                nums.push_back((n));
+                ops.push_back(c);
+                n = 0;
+            } else if (c >= '0' && c <= '9') {
+                n = n * 10 + (c - '0');
+            }
+            i++;
+        }
+        nums.push_back(n);
+        
+        while (nums.size() > 1) {
+            if (ops.size() == 0) break;
 
-		state = NUMBER_A;
-
-		next = 0;
-		length = s.length();
-		for (index = 0; index < length; index++) {
-			c = s[index];
-			if (c == ' ') continue;
-			if (c >= '0' && c <= '9') {
-				switch (state) {
-					case NUMBER_A:
-					case NUMBER_B:
-					case NEXT_NUMBER:
-						next = next * 10 + (c - '0');
-						break;
-				}
-			} else if (c == '+' || c == '-' || c == '*' || c == '/'){
-				switch (state) {
-					case NUMBER_A:
-						a = next;
-						next = 0;
-						state = OPERATOR;
-						break;
-					case NUMBER_B:
-						b = next;
-						next = 0;
-						if (op == MULTIPLY) {
-							a = a * b;
-							state = OPERATOR;
-						} else if (op == DIVIDE) {
-							a = a / b;
-							state = OPERATOR;
-						} else {
-							state = NEXT_OPERATOR;
-						}
-						break;
-					case NEXT_NUMBER:
-						nextNum = next;
-						next = 0;
-						if (nextOp == MULTIPLY) {
-							b = b * nextNum;
-						} else {
-							b = b / nextNum;
-						}
-						state = NEXT_OPERATOR;
-						break;
-				}
-				switch (c) {
-					case '+':
-						next2 = PLUS;
-						break;
-					case '-':
-						next2 = MINUS;
-						break;
-					case '*':
-						next2 = MULTIPLY;
-						break;
-					case '/':
-						next2 = DIVIDE;
-						break;
-				}
-				if (state == OPERATOR) {
-					op = next2;
-					state = NUMBER_B;
-				} else {
-					nextOp = next2;
-					if (nextOp == PLUS || nextOp == MINUS) {
-						if (op == PLUS) {
-							a = a + b;
-						} else {
-							a = a - b;
-						}
-						op = nextOp;
-						state = NUMBER_B;
-					} else {
-						state = NEXT_NUMBER;
-					}
-				}
-			}
-		}
-
-		if (state == NUMBER_A) {
-			a = next;
-		} else if (state == NUMBER_B) {
-			if (op == PLUS) {
-				a = a + next;
-			} else if (next > 0) {
-				a = a - next;
-			}
-		} else if (state == NEXT_OPERATOR) {
-			if (op == PLUS) {
-				a = a + b;
-			} else if (b > 0) {
-				a = a - b;
-			}
-		} else if (state == NEXT_NUMBER) {
-			if (nextOp == MULTIPLY) {
-				b = b * next;
-			} else if (next > 0) {
-				b = b / next;
-			}
-			if (op == PLUS) {
-				a = a + b;
-			} else if (b > 0) {
-				a = a - b;
-			}
-		}
-
-        return a;
+            if (ops.size() > 1 && (ops[0] == '+' || ops[0] == '-') && (ops[1] == '*' || ops[1] == '/')) {
+                if (ops[1] == '*') {
+                    nums[1] *= nums[2];
+                } else {
+                    if (nums[2] == 0) return 0;
+                    nums[1] /= nums[2];
+                }
+                it = nums.begin();
+                it++;
+                it++;
+                nums.erase(it);
+                opIt = ops.begin();
+                opIt++;
+                ops.erase(opIt);
+                continue;
+            }
+            
+            if (ops[0] == '+') {
+                nums[0] += nums[1];
+            } else if (ops[0] == '-') {
+                nums[0] -= nums[1];
+            } else if (ops[0] == '*') {
+                nums[0] *= nums[1];
+            } else {
+                if (nums[1] == 0) return 0;
+                nums[0] /= nums[1];
+            }
+            it = nums.begin();
+            it++;
+            nums.erase(it);
+            opIt = ops.begin();
+            ops.erase(opIt);
+        }
+        
+        return nums[0];
     }
 };
 
 int main(int argc, char* argv[]) {
-	Solution sol;
-	string s;
-	char buffer[256];
-
-	cin.get(buffer, 256);
-
-	s = string(buffer);
-
-	cout << sol.calculate(s) << "\n";
-
-	return 0;
+    Solution sol;
+    string s;
+    char buffer[256];
+    
+    cin.get(buffer, 256);
+    
+    s = string(buffer);
+    
+    cout << sol.calculate(s) << "\n";
+    
+    return 0;
 }
 
 /*
