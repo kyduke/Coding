@@ -14,12 +14,12 @@ struct Node {
 	}
 };
 
-void freeBST(Node* node) {
+void freeBT(Node* node) {
 	if (node == NULL) return;
-	freeBST(node->left);
+	freeBT(node->left);
 	free(node->left);
 	node->left = NULL;
-	freeBST(node->right);
+	freeBT(node->right);
 	free(node->right);
 	node->right = NULL;
 }
@@ -71,11 +71,11 @@ int main(int argc, char* argv[]) {
 
 	cout << haveSameIntegers(rootA, rootB) << "\n";
 
-	freeBST(rootA);
+	freeBT(rootA);
 	free(rootA);
 	rootA = NULL;
 
-	freeBST(rootB);
+	freeBT(rootB);
 	free(rootB);
 	rootB = NULL;
 
