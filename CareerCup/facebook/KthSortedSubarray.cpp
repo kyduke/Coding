@@ -9,7 +9,7 @@ using namespace std;
 int getKthElementFromSortedSubarray(vector<int> arr, int a, int b, int k) {
 	vector<int> subarray;
 
-	if (a > b || k > (b - a) || a >= arr.size() || b > arr.size()) return -1;
+	if (a < 0 || b < 0 || a >= b || k > (b - a) || a >= arr.size() || b > arr.size()) return -1;
 
 	subarray.assign(arr.begin() + a, arr.begin() + b);
 	sort(subarray.begin(), subarray.end());
