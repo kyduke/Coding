@@ -1,12 +1,8 @@
-// 325 B
+// http://codeforces.com/contest/586/problem/B
 
 #include <iostream>
-#include <vector>
-#include <algorithm>
 
 using namespace std;
-
-typedef unsigned long long UINT64;
 
 const int SIZE = 50;
 const int MAX_DIST = 100000;
