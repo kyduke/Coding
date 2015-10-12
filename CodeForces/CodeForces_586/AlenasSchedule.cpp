@@ -5,8 +5,6 @@
 
 using namespace std;
 
-typedef unsigned long long UINT64;
-
 vector<int> schedules;
 
 int solve() {
