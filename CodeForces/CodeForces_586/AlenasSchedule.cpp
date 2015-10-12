@@ -1,8 +1,7 @@
-// 325 A
+// http://codeforces.com/contest/586/problem/A
 
 #include <iostream>
 #include <vector>
-#include <algorithm>
 
 using namespace std;
 
