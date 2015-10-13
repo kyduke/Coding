@@ -1,5 +1,4 @@
 // https://algospot.com/judge/problem/read/KAKURO2
-// 시간초과
 
 #include <iostream>
 #include <vector>
@@ -10,75 +9,88 @@ using namespace std;
 
 const int SIZE = 20;
 
+int masks[10][46];
 int map[SIZE][SIZE];
-int candis[SIZE][SIZE][2][10];
-int sums[SIZE][SIZE][2];
-int counts[SIZE][SIZE][2];
+int maskMap[SIZE][SIZE];
+int hints[SIZE][SIZE][2][3];
 int starts[SIZE][SIZE][2];
 vector<int> costs; // count of candis * 1000 + y * 20 + x
-vector<int> cell[SIZE][SIZE];
+vector<int> cells[SIZE][SIZE];
 int N;
 
-bool findCandidate(int start, int y, int x, int d, int sum, int* cand) {
-	bool ret;
+void getCount(int n, int* sum, int* count) {
+	int i;
 
-	if (x >= N || y >= N) return false;
-	if (sum < 0) return false;
-	if (d == 0) {
-		if (map[y][x] == 1 && (x == N - 1 || map[y][x + 1] == 0)) {
-			if (sum < 10 && sum >= start) {
-				cand[sum] = 1;
-				return true;
-			}
-			return false;
+	*count = 0;
+	*sum = 0;
+	i = 1;
+	while (i < 10) {
+		if (n & (1 << i)) {
+			(*count)++;
+			*sum += i;
 		}
-
-		ret = false;
-		for (; start < 10; start++) {
-			if (findCandidate(start + 1, y, x + 1, d, sum - start, cand) == true) {
-				cand[start] = 1;
-				ret = true;
-			}
-		}
-	} else {
-		if (map[y][x] == 1 && (y == N - 1 || map[y + 1][x] == 0)) {
-			if (sum < 10 && sum >= start) {
-				cand[sum] = 1;
-				return true;
-			}
-			return false;
-		}
-
-		ret = false;
-		for (; start < 10; start++) {
-			if (findCandidate(start + 1, y + 1, x, d, sum - start, cand) == true) {
-				cand[start] = 1;
-				ret = true;
-			}
-		}
+		i++;
 	}
-
-	return ret;
 }
 
-void calcCost() {
-	int cost, i, j, k, x, y;
+void fillMasks() {
+	int i, sum, count;
+
+	memset(masks, 0, sizeof(int) * 10 * 46);
+
+	sum = 0;
+	count = 0;
+	for (i = 2; i < 1024; i += 2) {
+		getCount(i, &sum, &count);
+		masks[count][sum] |= i;
+	}
+}
+
+void fillCandiMask(int y, int x, int d, int sum) {
+	int i, count, mask;
+
+	count = 0;
+	if (d == 0) {
+		for (i = x + 1; i < N; i++) {
+			if (map[y][i] == 0) break;
+			count++;
+		}
+		mask = masks[count][sum];
+		for (i = x + 1; i < N; i++) {
+			if (map[y][i] == 0) break;
+			maskMap[y][i] = mask;
+			starts[y][i][0] = x;
+		}
+	} else {
+		for (i = y + 1; i < N; i++) {
+			if (map[i][x] == 0) break;
+			count++;
+		}
+		mask = masks[count][sum];
+		for (i = y + 1; i < N; i++) {
+			if (map[i][x] == 0) break;
+			maskMap[i][x] &= mask;
+			starts[i][x][1] = y;
+		}
+	}
+	hints[y][x][d][0] = mask;
+	hints[y][x][d][1] = count;
+	hints[y][x][d][2] = sum;
+}
+
+void findCandidate() {
+	int i, j, k, sum, count;
+
+	costs.clear();
 
 	for (j = 0; j < N; j++) {
 		for (i = 0; i < N; i++) {
-			if (map[j][i] == 1) {
-				cost = 0;
-				y = starts[j][i][1];
-				x = starts[j][i][0];
-				for (k = 1; k < 10; k++) {
-					if (candis[y][i][1][k] == 1 && candis[j][x][0][k] == 1) {
-						cell[j][i].push_back(k);
-						cost++;
-					}
-				}
-				
-				cost = cost * 1000 + j * SIZE + i;
-				costs.push_back(cost);
+			if (map[j][i] == 0) continue;
+			getCount(maskMap[j][i], &sum, &count);
+			costs.push_back(count * 1000 + j * 20 + i);
+			cells[j][i].clear();
+			for (k = 1; k < 10; k++) {
+				if ((maskMap[j][i] & (1 << k))) cells[j][i].push_back(k);
 			}
 		}
 	}
@@ -87,39 +99,47 @@ void calcCost() {
 }
 
 bool fillCandidate(int start) {
-	int i, j, k, x, y, n;
-
+	int i, j, k, bit, n, x, y, maskH, maskV, countH, countV, sumH, sumV;
+	
 	if (start == costs.size()) return true;
 
 	k = costs[start] % 1000;
 	j = k / SIZE;
 	i = k % SIZE;
+	x = starts[j][i][0];
+	y = starts[j][i][1];
+	maskH = hints[j][x][0][0];
+	maskV = hints[y][i][1][0];
+	countH = hints[j][x][0][1];
+	countV = hints[y][i][1][1];
+	sumH = hints[j][x][0][2];
+	sumV = hints[y][i][1][2];
 
-	for (n = 0; n < cell[j][i].size(); n++) {
-		k = cell[j][i][n];
-		x = starts[j][i][0];
-		if (candis[j][x][0][k] == 0) continue;
-		if (counts[j][x][0] == 1 && sums[j][x][0] != k) continue;
+	for (k = 0; k < cells[j][i].size(); k++) {
+		n = cells[j][i][k];
+		bit = 1 << n;
 
-		y = starts[j][i][1];
-		if (candis[y][i][1][k] == 0) continue;
-		if (counts[y][i][1] == 1 && sums[y][i][1] != k) continue;
-			
-		map[j][i] = k;
-		candis[j][x][0][k] = 0;
-		candis[y][i][1][k] = 0;
-		sums[j][x][0] -= k;
-		sums[y][i][1] -= k;
-		counts[j][x][0]--;
-		counts[y][i][1]--;
+		if ((maskH & bit) == 0) continue;
+		if (countH == 1 && sumH != n) continue;
+		
+		if ((maskV & bit) == 0) continue;
+		if (countV == 1 && sumV != n) continue;
+
+		map[j][i] = n;
+		hints[j][x][0][0] ^= bit;
+		hints[y][i][1][0] ^= bit;
+		hints[j][x][0][1]--;
+		hints[y][i][1][1]--;
+		hints[j][x][0][2] -= n;
+		hints[y][i][1][2] -= n;
 		if (fillCandidate(start + 1) == true) return true;
+		hints[y][i][1][2] += n;
+		hints[j][x][0][2] += n;
+		hints[y][i][1][1]++;
+		hints[j][x][0][1]++;
+		hints[y][i][1][0] ^= bit;
+		hints[j][x][0][0] ^= bit;
 		map[j][i] = 1;
-		candis[j][x][0][k] = 1;
-		candis[y][i][1][k] = 1;
-		sums[j][x][0] += k;
-		sums[y][i][1] += k;
-		counts[j][x][0]++;
-		counts[y][i][1]++;
 	}
 
 	return false;
@@ -128,8 +148,7 @@ bool fillCandidate(int start) {
 void solve() {
 	int i, j;
 
-	costs.clear();
-	calcCost();
+	findCandidate();
 	fillCandidate(0);
 
 	for (j = 0; j < N; j++) {
@@ -143,17 +162,17 @@ void solve() {
 int main(int argc, char* argv[]) {
 	int T, Q, y, x, d, s, i, j;
 
+	fillMasks();
+
 	cin >> T;
 	while (T--) {
-		memset(candis, 0, sizeof(int) * SIZE * SIZE * 2 * 10);
-
 		cin >> N;
 		j = 0;
 		while (j < N) {
 			i = 0;
 			while (i < N) {
 				cin >> map[j][i];
-				cell[j][i].clear();
+				maskMap[j][i] = 0;
 				i++;
 			}
 			j++;
@@ -162,26 +181,7 @@ int main(int argc, char* argv[]) {
 		cin >> Q;
 		while (Q--) {
 			cin >> y >> x >> d >> s;
-			sums[y - 1][x - 1][d] = s;
-			if (d == 0) {
-				findCandidate(1, y - 1, x, d, s, candis[y - 1][x - 1][d]);
-				j = 0;
-				for (i = x; i < N; i++) {
-					if (map[y - 1][i] == 0) break;
-					starts[y - 1][i][0] = x - 1;
-					j++;
-				}
-				counts[y - 1][x - 1][0] = j;
-			} else {
-				findCandidate(1, y, x - 1, d, s, candis[y - 1][x - 1][d]);
-				i = 0;
-				for (j = y; j < N; j++) {
-					if (map[j][x - 1] == 0) break;
-					starts[j][x - 1][1] = y - 1;
-					i++;
-				}
-				counts[y - 1][x - 1][1] = i;
-			}
+			fillCandiMask(y - 1, x - 1, d, s);
 		}
 
 		solve();
