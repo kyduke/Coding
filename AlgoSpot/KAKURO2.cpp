@@ -16,7 +16,7 @@ int map[SIZE][SIZE];
 int maskMap[SIZE][SIZE];
 int hints[SIZE][SIZE][2][3];
 int starts[SIZE][SIZE][2];
-vector<int> costs; // count of candis * 1000 + y * 20 + x
+vector<pair<int, int>> costs;
 vector<int> cells[SIZE][SIZE];
 int N;
 
@@ -76,23 +76,38 @@ void fillCandiMask(int y, int x, int d, int sum) {
 
 void findCandidate() {
 	int i, j, k, sum, count;
+	vector<pair<int, pair<int, int>>> rowCosts;
 
 	costs.clear();
 
 	for (j = 0; j < N; j++) {
 		for (i = 0; i < N; i++) {
-			if (map[j][i] == 0) continue;
+			if (map[j][i] == 0) {
+				if (rowCosts.size()) {
+					sort(rowCosts.begin(), rowCosts.end());
+					for (k = 0; k < rowCosts.size(); k++) {
+						costs.push_back(make_pair(rowCosts[k].second.first, rowCosts[k].second.second));
+					}
+					rowCosts.clear();
+				}
+				continue;
+			}
 			sum = maskSum[maskMap[j][i]];
 			count = maskLen[maskMap[j][i]];
-			costs.push_back(count * 1000 + j * 20 + i);
+			rowCosts.push_back(make_pair(count, make_pair(j, i)));
 			cells[j][i].clear();
 			for (k = 1; k < 10; k++) {
 				if ((maskMap[j][i] & (1 << k))) cells[j][i].push_back(k);
 			}
 		}
 	}
-
-	sort(costs.begin(), costs.end());
+	if (rowCosts.size()) {
+		sort(rowCosts.begin(), rowCosts.end());
+		for (k = 0; k < rowCosts.size(); k++) {
+			costs.push_back(make_pair(rowCosts[k].second.first, rowCosts[k].second.second));
+		}
+		rowCosts.clear();
+	}
 }
 
 bool fillCandidate(int start) {
@@ -100,9 +115,8 @@ bool fillCandidate(int start) {
 	
 	if (start == costs.size()) return true;
 
-	k = costs[start] % 1000;
-	j = k / SIZE;
-	i = k % SIZE;
+	j = costs[start].first;
+	i = costs[start].second;
 	x = starts[j][i][0];
 	y = starts[j][i][1];
 	maskH = hints[j][x][0][0];
