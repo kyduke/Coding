@@ -39,9 +39,9 @@ string rearrange(string str) {
 			if (last.compare(rit->second) == 0) rit++;
 			i = rit->first;
 			last = rit->second;
+			remains.erase(next(rit).base());
 			result.append(last);
 			if (i > 1) remains.insert(make_pair(i - 1, last));
-			remains.erase(next(rit).base());
 		}
 	}
 
