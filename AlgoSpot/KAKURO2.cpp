@@ -9,6 +9,8 @@ using namespace std;
 
 const int SIZE = 20;
 
+int maskSum[1024];
+int maskLen[1024];
 int masks[10][46];
 int map[SIZE][SIZE];
 int maskMap[SIZE][SIZE];
@@ -18,30 +20,24 @@ vector<int> costs; // count of candis * 1000 + y * 20 + x
 vector<int> cells[SIZE][SIZE];
 int N;
 
-void getCount(int n, int* sum, int* count) {
-	int i;
-
-	*count = 0;
-	*sum = 0;
-	i = 1;
-	while (i < 10) {
-		if (n & (1 << i)) {
-			(*count)++;
-			*sum += i;
-		}
-		i++;
-	}
-}
-
 void fillMasks() {
-	int i, sum, count;
+	int mask, i, sum, count;
 
 	memset(masks, 0, sizeof(int) * 10 * 46);
+	memset(maskSum, 0, sizeof(int) * 1024);
+	memset(maskLen, 0, sizeof(int) * 1024);
 
-	sum = 0;
-	count = 0;
+	for(mask = 0; mask < 1024; mask++) {
+		for(int i = 0; i < 10; i++)
+			if(mask & (1 << i)) {
+				maskSum[mask] += i;
+				maskLen[mask]++;
+			}
+	}
+
 	for (i = 2; i < 1024; i += 2) {
-		getCount(i, &sum, &count);
+		sum = maskSum[i];
+		count = maskLen[i];
 		masks[count][sum] |= i;
 	}
 }
@@ -86,7 +82,8 @@ void findCandidate() {
 	for (j = 0; j < N; j++) {
 		for (i = 0; i < N; i++) {
 			if (map[j][i] == 0) continue;
-			getCount(maskMap[j][i], &sum, &count);
+			sum = maskSum[maskMap[j][i]];
+			count = maskLen[maskMap[j][i]];
 			costs.push_back(count * 1000 + j * 20 + i);
 			cells[j][i].clear();
 			for (k = 1; k < 10; k++) {
