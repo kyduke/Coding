@@ -2,13 +2,13 @@
 
 #include <iostream>
 
-typedef unsigned int UINT16;
+typedef unsigned short UINT16;
 
 using namespace std;
 
-const UINT16 MAX_UINT16 = 4294967295;
+const UINT16 MAX_UINT16 = 65535;
 
-int totalMoney = 123493;
+int totalMoney = 15531;
 
 UINT16 withdraw(UINT16 n) {
 	if (totalMoney < n) return 0;
