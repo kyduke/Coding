@@ -26,7 +26,6 @@ void withdrawAll() {
 	}
 }
 
-
 int main(int argc, char* argv[]) {
 	withdrawAll();
 
