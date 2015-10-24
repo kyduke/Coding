@@ -51,8 +51,8 @@ void divideLinkedList(Node* node, Node** fRoot, Node** oRoot) {
 		}
 		node = node->next;
 	}
-	fNode->next = NULL;
-	oNode->next = NULL;
+	if (fNode) fNode->next = NULL;
+	if (oNode) oNode->next = NULL;
 }
 
 void addLinkedList(Node* node, int v) {
