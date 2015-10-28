@@ -26,7 +26,7 @@ vector<int> remainGreaterCount(vector<int>& arr) {
 	for (i = arr.size() - 1; i >= 0; i--) {
 		s.insert(arr[i]);
 		it = s.upper_bound(arr[i]);
-		result[i] = s.size() - distance(s.begin(), it);
+		result[i] = distance(it, s.end());
 	}
 
 	return result;
