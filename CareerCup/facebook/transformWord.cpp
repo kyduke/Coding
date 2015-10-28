@@ -13,7 +13,8 @@ struct Word {
 	int step;
 	Word(int i, int d, int s) : index(i), dist(d), step(s) {};
 	bool operator<(const Word& a) const {
-		return dist > a.dist;
+		if (step == a.step) return dist > a.dist;
+		return step > a.step;
 	}
 };
 
