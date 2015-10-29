@@ -8,7 +8,7 @@ void printBigPair(vector<int>& arr, int N) {
 
     for (i = 0; i < arr.size(); i++) {
         for (j = i + 1; j < arr.size(); j++) {
-            if (arr[i] + arr[j] == N) cout << "(" << arr[i] << ", " << arr[j] << ") ";
+            if (arr[i] + arr[j] > N) cout << "(" << arr[i] << ", " << arr[j] << ") ";
         }
     }
     cout << "\n";
