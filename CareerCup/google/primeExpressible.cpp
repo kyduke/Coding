@@ -21,13 +21,15 @@ UINT64 getNthNumber(vector<int>& primes, int n) {
     set<UINT64> nums;
     set<UINT64>::iterator it;
     set<UINT64>::reverse_iterator rit;
+    UINT64 limit;
     unsigned int i;
     
     nums.insert(1);
     for (i = 0; i < primes.size(); i++) {
         it = nums.begin();
+        limit = LIMIT / primes[i];
         while (it != nums.end()) {
-            if (*it > LIMIT / primes[i]) break;
+            if (*it > limit) break;
             nums.insert(*it * primes[i]);
             it++;
         }
