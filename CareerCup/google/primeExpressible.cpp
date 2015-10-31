@@ -25,13 +25,7 @@ UINT64 getNthNumber(vector<int>& primes, int n) {
     
     nums.insert(1);
     for (i = 0; i < primes.size(); i++) {
-        nums.insert(primes[i]);
-    }
-    
-    for (i = 0; i < primes.size(); i++) {
         it = nums.begin();
-        it++;
-        
         while (it != nums.end()) {
             if (*it > LIMIT / primes[i]) break;
             nums.insert(*it * primes[i]);
@@ -59,7 +53,7 @@ int main(int argc, const char * argv[]) {
     primes.clear();
     primes.push_back(99991);
     
-    cout << getNthNumber(primes, 1) << "\n";
+    cout << getNthNumber(primes, 3) << "\n";
     cout << getNthNumber(primes, 1000000) << "\n";
     
     return 0;
