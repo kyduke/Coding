@@ -31,6 +31,7 @@ UINT64 getNthNumber(vector<int>& primes, int n) {
         while (it != nums.end()) {
             if (*it > limit) break;
             nums.insert(*it * primes[i]);
+            if (nums.size() == n * 2) break;
             it++;
         }
         
