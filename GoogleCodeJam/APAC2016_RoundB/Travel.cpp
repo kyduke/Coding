@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-#include <fstream>
+#include <stdio.h>
 
 using namespace std;
 
@@ -100,8 +100,8 @@ int minCost(int d, int s) {
 int main(int argc, char* argv[]) {
 	int T, M, K, x, y, i, t, d, s, c;
 
-	ifstream in("in.txt");
-    cin.rdbuf(in.rdbuf());
+	freopen("in.txt", "r", stdin);
+	freopen ("out.txt", "w", stdout);
 
 	cin >> T;
 	c = 0;
@@ -145,6 +145,9 @@ int main(int argc, char* argv[]) {
 
 		cout << "\n";
 	}
+
+	fclose(stdin);
+	fclose(stdout);
 
 	return 0;
 }
