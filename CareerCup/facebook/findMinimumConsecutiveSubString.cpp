@@ -40,7 +40,7 @@ string findMinimumConsecutiveSubString(string s, string t) {
 	
 	if (cnt != 0) return "";
 	
-	return s.substr(start, end);
+	return s.substr(start, end - start + 1);
 }
 
 int main(int argc, char* argv[]) {
