@@ -16,7 +16,7 @@ const int SIZE = 5;
 const int SUM = 200;
 
 int arr[SIZE] = {1, 2, 5, 10, 20};
-int cache[SIZE][SUM];
+int cache[SIZE][SUM + 1];
 
 int casesOfSum(int depth, int remain) {
     int i, k;
@@ -40,7 +40,7 @@ int casesOfSum(int depth, int remain) {
 }
 
 int main(int argc, const char * argv[]) {
-    memset(cache, -1, sizeof(int) * SIZE * SUM);
+    memset(cache, -1, sizeof(int) * SIZE * (SUM + 1));
     
     cout << casesOfSum(0, SUM) << "\n";
     
