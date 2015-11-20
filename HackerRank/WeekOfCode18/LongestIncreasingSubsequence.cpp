@@ -8,7 +8,6 @@ using namespace std;
 
 int findLIS(vector<int>& arr) {
     vector<int> lis;
-    vector<int> prevs(arr.size());
     int i, j, k, n;
  
 	if (arr.empty()) return 0;
@@ -17,7 +16,6 @@ int findLIS(vector<int>& arr) {
  
 	for (i = 1; i < arr.size(); i++) {
 		if (arr[ lis.back() ] < arr[i]) {
-			prevs[i] = lis.back();
 			lis.push_back(i);
 			continue;
 		}
@@ -34,9 +32,6 @@ int findLIS(vector<int>& arr) {
 		}
 
 		if (arr[i] < arr[ lis[j] ]) {
-            if (j > 0) {
-                prevs[i] = lis[j - 1];
-            }
 			lis[j] = i;
 		}	
 	}
