@@ -73,6 +73,12 @@ void caseN(int node, int x) {
 
 	k = 2;
 	while (linkCount < x) {
+		i = 0;
+		j = (i + k) % node;
+		if (maps[i][j] == 1) {
+			k++;
+			continue;
+		}
 		for (i = 0; i < node; i++) {
 			j = (i + k) % node;
 
