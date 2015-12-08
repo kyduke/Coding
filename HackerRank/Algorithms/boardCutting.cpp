@@ -10,39 +10,40 @@ typedef unsigned long long UINT64;
 
 const UINT64 MOD = 1000000007;
 
-UINT64 solve(vector<int>& xs, vector<int>& ys) {
-	vector< vector<UINT64> > coe;
-	vector<UINT64> v;
-	UINT64 x, y;
+UINT64 solve(vector<UINT64>& xs, vector<UINT64>& ys) {
+	UINT64 cost;
 	int i, j;
-	
-	v.assign(xs.size() + 1, 0);
-	coe.assign(ys.size() + 1, v);
-	
-	for (i = 0; i < xs.size(); i++) {
-		coe[0][i + 1] = coe[0][i] + xs[i];
-	}
-	for (j = 0; j < ys.size(); j++) {
-		coe[j + 1][0] = coe[j][0] + ys[j];
-	}
 
-	for (i = 0; i < xs.size(); i++) {
-		for (j = 0; j < ys.size(); j++) {
-			x = coe[j][i + 1] + ((i + 2) * ys[j]);
-			y = coe[j + 1][i] + ((j + 2) * xs[i]);
-			if (x < y) {
-				coe[j + 1][i + 1] = x % MOD;
-			} else {
-				coe[j + 1][i + 1] = y % MOD;
-			}
+	sort(xs.begin(), xs.end(), greater<int>());
+	sort(ys.begin(), ys.end(), greater<int>());
+
+	cost = 0;
+	
+	i = 0;
+	j = 0;
+	while (i < xs.size() && j < ys.size()) {
+		if (xs[i] > ys[j]) {
+			cost = (cost + (j + 1) * xs[i]) % MOD;
+			i++;
+		} else {
+			cost = (cost + (i + 1) * ys[j]) % MOD;
+			j++;
 		}
 	}
+	while (i < xs.size()) {
+		cost = (cost + (j + 1) * xs[i]) % MOD;
+		i++;
+	}
+	while (j < ys.size()) {
+		cost = (cost + (i + 1) * ys[j]) % MOD;
+		j++;
+	}
 
-	return coe[xs.size()][ys.size()];
+	return cost;
 }
 
 int main(int argc, char* argv[]) {
-	vector<int> xs, ys;
+	vector<UINT64> xs, ys;
 	int t, n, m, i;
 
 	cin >> t;
@@ -63,9 +64,6 @@ int main(int argc, char* argv[]) {
 			cin >> ys[i];
 			i++;
 		}
-
-		sort(xs.begin(), xs.end(), greater<int>());
-		sort(ys.begin(), ys.end(), greater<int>());
 
 		cout << solve(xs, ys) << "\n";
 	}
