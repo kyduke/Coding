@@ -9,8 +9,8 @@ int main(int argc, char* argv[]) {
 	string a, s;
 	int alphabets[256];
 	UINT64 positions[10];
-	int i, k;
-	UINT64 answer;
+	int i;
+	UINT64 answer, k;
 
 	cin >> a >> s;
 
