@@ -22,7 +22,7 @@ public:
                 copy = subs;
                 subs.clear();
                 for (j = 0; j < copy.size(); j++) {
-                    if (copy[j].first >= length || copy[j].second <= nums[i]) {
+                    if (copy[j].first >= length || copy[j].second < nums[i]) {
                         subs.push_back(copy[j]);
                     }
                 }
