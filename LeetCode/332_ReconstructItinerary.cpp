@@ -1,19 +1,25 @@
 // https://leetcode.com/problems/reconstruct-itinerary/
-// Time Limit Exceeded
 
 #include <iostream>
 #include <vector>
 #include <string>
 #include <set>
 #include <stack>
+#include <algorithm>
 
 using namespace std;
 
 class Solution {
 private:
+	struct Compare {
+		bool operator() (const pair<string, string>& a, const pair<string, string>& b) {
+			if (a.first == b.first) return a.second < b.second;
+			return a.first < b.first;
+		}
+	};
 	struct Node {
 		int current;
-		int state;
+		bool processed;
 	};
 public:
     vector<string> findItinerary(vector<pair<string, string>> tickets) {
@@ -21,15 +27,16 @@ public:
 		Node node;
 		vector<int> visit;
         vector<string> result;
-		string bests, ings, from;
-		bool flag;
+		string from;
 		int i;
 
-		ings = "JFK";
+		sort(tickets.begin(), tickets.end(), Compare());
+
+		result.push_back("JFK");
 
 		visit.assign(tickets.size(), 0);
 		node.current = 0;
-		node.state = 0;
+		node.processed = false;
 		s.push(node);
 
 		while (!s.empty()) {
@@ -38,30 +45,23 @@ public:
 
 			if (node.current >= tickets.size()) continue;
 
-			if (node.state == 0) {
+			if (node.processed == false) {
 				if (visit[ node.current ] == 1) {
 					node.current++;
 					s.push(node);
 				} else {
-					from = ings.substr(ings.size() - 3, 3);
-					if (bests.size() > 0 && bests < ings) {
-						node.current++;
-						s.push(node);
-						continue;
-					}
+					from = *result.rbegin();
 					if (tickets[ node.current ].first == from) {
 						visit[ node.current ] = 1;
-						ings += tickets[ node.current ].second;
-						if (ings.size() / 3 > tickets.size()) {
-							if (bests.size() == 0 || bests > ings) {
-								bests = ings;
-							}
+						result.push_back(tickets[ node.current ].second);
+						if (result.size() > tickets.size()) {
+							return result;
 						}
-						node.state++;
+						node.processed = true;
 						s.push(node);
 
 						node.current = 0;
-						node.state = 0;
+						node.processed = false;
 						s.push(node);
 					} else {
 						node.current++;
@@ -70,16 +70,14 @@ public:
 				}
 			} else {
 				visit[ node.current ] = 0;
-				ings = ings.substr(0, ings.size() - 3);
+				result.pop_back();
 				node.current++;
-				node.state = 0;
+				node.processed = false;
 				s.push(node);
 			}
 		}
 
-		for (i = 0; i < bests.size(); i += 3) {
-			result.push_back(bests.substr(i, 3));
-		}
+		result.clear();
 
 		return result;
     }
