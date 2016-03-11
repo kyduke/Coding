@@ -47,6 +47,7 @@ void solve(int m, int n, int r) {
 			i--;
 		}
 
+		if (shell.size() == 0) break;
 		k = r % shell.size();
 		for (i = 0; i < k; i++) {
 			shell.push_back(shell[i]);
