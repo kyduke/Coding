@@ -13,6 +13,7 @@ void printLongestSubstringLexicographicallyBigger(string str) {
 		found = true;
 		for (j = 0; i + j < str.size(); j++) {
 			if (str[j] > str[i + j]) {
+                                i += j;
 				found = false;
 				break;
 			} else if (str[j] < str[i + j]) {
