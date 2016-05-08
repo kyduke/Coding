@@ -9,9 +9,9 @@ using namespace std;
 int solve(vector<int> arr) {
 	map<int, int> m;
 	map<int, int>::iterator it;
-	int hotest, i, k;
-	vector<int> candidates;
+	int answer, hotest, i, k;
 
+	answer = 0;
 	hotest = 0;
 	for (i = 0; i < arr.size(); i++) {
 		it = m.find(arr[i]);
@@ -24,14 +24,11 @@ int solve(vector<int> arr) {
 		}
 		if (hotest < k) {
 			hotest = k;
-			candidates.clear();
-			candidates.push_back(arr[i]);
-		} else if (hotest == k) {
-			candidates.push_back(arr[i]);
+			answer = arr[i];
 		}
 	}
 
-	return candidates[0];
+	return answer;
 }
 
 int main(int argc, char* argv[]) {
