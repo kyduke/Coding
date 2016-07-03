@@ -12,13 +12,23 @@ const int SIZE = 50001;
 
 int solve(map<int, vector<int>>& m, int n) {
 	map<int, vector<int>>::iterator it;
+	vector<int> curr, temp;
 	int i, c;
 
-	c = 0;
+	c = 1;
 	it = m.find(n);
-	if (it == m.end()) return 1;
-	for (i = 0; i < it->second.size(); i++) {
-		c = max(c, solve(m, it->second[i]) + 1);
+	curr = it->second;
+
+	while (curr.size()) {
+		temp.clear();
+		for (i = 0; i < curr.size(); i++) {
+			it = m.find(curr[i]);
+			if (it != m.end()) {
+				temp.insert(temp.end(), it->second.begin(), it->second.end());
+			}
+		}
+		curr = temp;
+		c++;
 	}
 
 	return c;
