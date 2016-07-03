@@ -1,5 +1,8 @@
 // LGE CodeJam 2016 Problem 4
 // Failed Set3, Set4
+// Lowest Common Ancestor 찾기 방식으로 풀림
+// 부모를 1, 2, 4, 8, ... 로 저장하면 빨리 공통부모를 찾을 수 있음
+// 1 ~ 500이면 250이 같은지 찾고, 다시 1~249나 250~500을 찾는 방식으로 공통부모를 찾음
 
 #include <iostream>
 #include <map>
