@@ -10,15 +10,17 @@
 
 #include <iostream>
 #include <vector>
+#include <set>
 
 using namespace std;
 
 typedef unsigned long long UINT64;
 
 UINT64 solve(vector<int>& costs, vector<int>& capitals) {
-    UINT64 answer, sum, kSum;
+    UINT64 answer, kCostSum, sum, kSum, temp;
     vector<UINT64> neighborCosts;
-    int i, c, n, k;
+	set<int> s;
+    int i, c, d, n, k;
     
     n = (int)costs.size();
     neighborCosts.assign(n, 0);
@@ -35,11 +37,23 @@ UINT64 solve(vector<int>& costs, vector<int>& capitals) {
     kSum = 0;
     for (i = 0; i < k; i++) {
         c = capitals[i];
-        answer += (sum - costs[c] - neighborCosts[c] - kSum) * costs[c];
-        kSum += costs[c];
+        answer += (sum - costs[c] - neighborCosts[c]) * costs[c];
+		kSum += costs[c];
+		s.insert(c);
     }
-    
-    return answer;
+
+	kCostSum = 0;
+	for (i = 0; i < k; i++) {
+        c = capitals[i];
+		temp = kSum - costs[c];
+		d = (c + 1) % n;
+		if (s.find(d) != s.end()) temp -= costs[d];
+		d = (c - 1 + n) % n;
+		if (s.find(d) != s.end()) temp -= costs[d];
+        kCostSum += temp * costs[c];
+    };
+
+    return answer - kCostSum / 2;
 }
 
 int main(int argc, const char * argv[]) {
