@@ -1,36 +1,41 @@
 // https://www.hackerrank.com/contests/w22/challenges/polygon-making
 
-#include <map>
-#include <set>
-#include <list>
-#include <cmath>
-#include <ctime>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <string>
-#include <bitset>
-#include <cstdio>
-#include <limits>
-#include <vector>
-#include <climits>
-#include <cstring>
-#include <cstdlib>
-#include <fstream>
-#include <numeric>
-#include <sstream>
 #include <iostream>
-#include <algorithm>
-#include <unordered_map>
 
 using namespace std;
 
 int main(){
-    int n;
+    int i, n, a, m, sum;
     cin >> n;
-    vector<int> a(n);
-    for(int a_i = 0;a_i < n;a_i++){
-       cin >> a[a_i];
+    
+    m = 0;
+    sum = 0;
+    
+    i = 0;
+    while (i < n){
+       cin >> a;
+       sum += a;
+       m = max(m, a);
+       i++;
     }
+    
+    if (n == 1) {
+        cout << 2;
+    } else if (n == 2) {
+        m += m;
+        if (m == sum) {
+            cout << 2;
+        } else {
+            cout << 1;
+        }
+    } else {
+        m += m;
+        if (m >= sum) {
+            cout << 1;
+        } else {
+            cout << 0;
+        }
+    }
+    
     return 0;
 }
