@@ -1,5 +1,9 @@
 // http://codeforces.com/contest/707/problem/C
 // Pythagorean Triples
+// a is odd number, m = (a + 1) / 2, n = (a - 1) / 2, m^2 - n^2 = (a^2 + 2a + 1) / 4 - (a^2 - 2a + 1) / 4 = a
+// a = m^2 - n^2, b = 2mn, c = m^2 + n^2, (a, b, c) is Pythagorian triples
+// first Pythagorian triples are (3, 4, 5), 9x^2 + 16x^2 = 25X^2 => 9 + 16 = 25
+// a is odd number, b is even number, 0, 1, 2, a, 4, a, 2a, a, 4b, a...
 
 #include <iostream>
 
