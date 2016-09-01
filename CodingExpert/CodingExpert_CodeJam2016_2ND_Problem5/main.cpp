@@ -6,6 +6,7 @@
 //  Copyright © 2016 Young Duke Koh. All rights reserved.
 //
 // LGE Code Jam 2016 2nd Problem E Escape Plan
+// Maximum Flow(Network Flow)
 
 #include <iostream>
 #include <vector>
@@ -44,8 +45,7 @@ int distance(pair<int, int>& p1, pair<int, int>& p2) {
     } else {
         dist += y2 - y1;
     }
-    
-    
+
     return dist;
 }
 
