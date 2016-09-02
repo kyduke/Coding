@@ -1,4 +1,4 @@
-### LGE Code Jam 2016 2nd Problem 3
+### LGE Code Jam 2016 2nd Problem 2
 
 # Intersection
 
