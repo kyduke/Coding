@@ -27,6 +27,7 @@ void solve(int n, vector<int>& idxs) {
 	ans.push_back(0);
 
 	arr[0].used = false;
+	arr[n + 1].used = false;
 
 	for (i = idxs.size() - 1; i > 1; i--) {
 		k = idxs[i];
