@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
 	int i, j, k, n;
 
 	i = 0;
-	keyFile.open("D:/workspace/ProjectEuler_81_PathSumTwoWays/81_PathSumTwoWays.txt");
+	keyFile.open("D:/workspace/ProjectEuler_81_PathSumTwoWays/081_PathSumTwoWays.txt");
 	while (true) {
 		keyFile >> buffer;
 		j = 0;
