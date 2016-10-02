@@ -42,7 +42,7 @@ int main(int argc, char* argv[]) {
 	int result;
 
 	i = 0;
-	keyFile.open("D:/workspace/ProjectEuler_82_PathSumThreeWays/82_PathSumThreeWays.txt");
+	keyFile.open("D:/workspace/ProjectEuler_82_PathSumThreeWays/082_PathSumThreeWays.txt");
 	while (true) {
 		keyFile >> buffer;
 		j = 0;
