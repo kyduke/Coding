@@ -93,7 +93,7 @@ int main(int argc, char* argv[]) {
 	map<string, vector<string>>::iterator it;
 	vector<string> values;
 
-	wordFile.open("D:/workspace/Coding/ProjectEuler_98_AnagramicSquares/98_AnagramicSquares.txt");
+	wordFile.open("D:/workspace/Coding/ProjectEuler_98_AnagramicSquares/098_AnagramicSquares.txt");
 	wordFile.seekg(0, wordFile.end);
 	length = wordFile.tellg();
 	wordFile.seekg(0, wordFile.beg);
