@@ -97,7 +97,7 @@ int main(int argc, char* argv[]) {
 
 	i = 0;
 	j = 0;
-	puzzleFile.open("D:/workspace/Coding/ProjectEuler_96_SuDoKu/96_SuDoKu.txt");
+	puzzleFile.open("D:/workspace/Coding/ProjectEuler_96_SuDoKu/096_SuDoKu.txt");
 	while (true) {
 		puzzleFile >> buffer;
 
