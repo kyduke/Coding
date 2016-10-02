@@ -53,7 +53,7 @@ int main(int argc, char* argv[]) {
 	int i, j, k, n;
 
 	i = 0;
-	keyFile.open("D:/workspace/ProjectEuler_83_PathSumFourWays/83_PathSumFourWays.txt");
+	keyFile.open("D:/workspace/ProjectEuler_83_PathSumFourWays/083_PathSumFourWays.txt");
 	while (true) {
 		keyFile >> buffer;
 		j = 0;
