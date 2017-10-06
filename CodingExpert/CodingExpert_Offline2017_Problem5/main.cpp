@@ -63,7 +63,7 @@ UINT32 solve(UINT32 s, UINT32 a, UINT32 b) {
 
 	j = (s - 1) / STEP;
 	it = cache[j].lower_bound(a);
-	if (it == cache[j].end()) it = cache[j].begin();
+	if (it == cache[j].end()) it--;
 	while (it->first >= a) {
 		it--;
 	}
