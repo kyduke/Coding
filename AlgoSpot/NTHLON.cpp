@@ -1,4 +1,5 @@
 // https://algospot.com/judge/problem/read/NTHLON
+// dijkstra
 
 #include <iostream>
 #include <vector>
