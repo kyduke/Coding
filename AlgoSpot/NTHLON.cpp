@@ -11,8 +11,7 @@ struct Node {
     int pos;
 };
 struct Compare {
-    bool operator()(const Node& a, const Node& b)
-    {
+    bool operator()(const Node& a, const Node& b) {
         return a.dist < b.dist;
     }
 };
@@ -42,13 +41,11 @@ int solve() {
 
         dist = node.dist;
         i = node.pos;
-        if (arr[i] < dist)
-            continue;
+        if (arr[i] < dist) continue;
 
         for (j = 1; j < SIZE; j++) {
             node.dist = dist + table[i][j];
-            if (arr[j] <= node.dist)
-                continue;
+            if (arr[j] <= node.dist) continue;
             arr[j] = node.dist;
             node.pos = j;
             q.push(node);
@@ -75,20 +72,18 @@ int main(int argc, char* argv[]) {
             for (j = 0; j < SIZE; j++) {
                 if (j == 0) {
                     k = 201 + a - b;
-                }
-                else {
+                } else {
                     k = j + a - b;
                 }
-                if (k < 1 || k >= SIZE)
-                    continue;
+                if (k < 1 || k >= SIZE) continue;
                 table[j][k] = min(table[j][k], a);
             }
         }
+        
         ans = solve();
         if (ans == MAX_ANSWER) {
             printf("IMPOSSIBLE\n");
-        }
-        else {
+        } else {
             printf("%d\n", ans);
         }
     }
