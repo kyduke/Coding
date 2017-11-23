@@ -2,7 +2,7 @@
 
 using namespace std;
 
-typedef ling long INT64;
+typedef long long INT64;
 
 const INT64 MOD = 1000000007
 
