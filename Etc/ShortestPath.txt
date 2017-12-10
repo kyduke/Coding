@@ -1,0 +1,157 @@
+Shortest path
+
+Dijkstra
+
+This algorithm is a single source shortest path (from one source to any other vertices). Pay attention that you can't have edges with negative weight.
+
+Pseudo code :
+
+dijkstra(v) :
+        d[i] = inf for each vertex i
+        d[v] = 0
+        s = new empty set
+        while s.size() < n
+                x = inf
+                u = -1
+                for each i in V-s //V is the set of vertices
+                        if x >= d[i]
+                                then x = d[i], u = i
+                insert u into s
+                // The process from now is called Relaxing
+                for each i in adj[u]
+                        d[i] = min(d[i], d[u] + w(u,i))
+                        
+There are two different implementations for this. Both are useful (C++11).
+
+One) O(n^2)
+
+int mark[MAXN];
+void dijkstra(int v){
+	fill(d,d + n, inf);
+	fill(mark, mark + n, false);
+	d[v] = 0;
+	int u;
+	while(true){
+		int x = inf;
+		u = -1;
+		for(int i = 0;i < n;i ++)
+			if(!mark[i] and x >= d[i])
+				x = d[i], u = i;
+		if(u == -1)	break;
+		mark[u] = true;
+		for(auto p : adj[u]) //adj[v][i] = pair(vertex, weight)
+			if(d[p.first] > d[u] + p.second)
+				d[p.first] = d[u] + p.second;
+	}
+}
+
+Two) O(n logn)
+
+1) Using std :: set :
+void dijkstra(int v){
+	fill(d,d + n, inf);
+	d[v] = 0;
+	int u;
+	set<pair<int,int> > s;
+	s.insert({d[v], v});
+	while(!s.empty()){
+		u = s.begin() -> second;
+		s.erase(s.begin());
+		for(auto p : adj[u]) //adj[v][i] = pair(vertex, weight)
+			if(d[p.first] > d[u] + p.second){
+				s.erase({d[p.first], p.first});
+				d[p.first] = d[u] + p.second;
+				s.insert({d[p.first], p.first});
+			}
+	}
+}
+
+2) Using std :: priority_queue (better):
+
+bool mark[MAXN];
+void dijkstra(int v){
+	fill(d,d + n, inf);
+	fill(mark, mark + n, false);
+	d[v] = 0;
+	int u;
+	priority_queue<pair<int,int>,vector<pair<int,int> >, less<pair<int,int> > > pq;
+	pq.push({d[v], v});
+	while(!pq.empty()){
+		u = pq.top().second;
+		pq.pop();
+		if(mark[u])
+			continue;
+		mark[u] = true;
+		for(auto p : adj[u]) //adj[v][i] = pair(vertex, weight)
+			if(d[p.first] > d[u] + p.second){
+				d[p.first] = d[u] + p.second;
+				pq.push({d[p.first], p.first});
+			}
+	}
+}
+
+Problem: ShortestPath Query
+
+Floyd-Warshall
+
+Floyd-Warshal algorithm is an all-pairs shortest path algorithm using dynamic programming.
+
+It is too simple and undrestandable :
+
+Floyd-Warshal()
+	d[v][u] = inf for each pair (v,u)
+	d[v][v] = 0 for each vertex v
+	for k = 1 to n
+		for i = 1 to n
+			for j = 1 to n
+				d[i][j] = min(d[i][j], d[i][k] + d[k][j])
+        
+Time complexity : O(n^3).
+
+Bellman-Ford
+
+Bellman-Ford is an algorithm for single source shortest path where edges can be negative (but if there is a cycle with negative weight, then this problem will be NP).
+The main idea is to relax all the edges exactly n - 1 times (read relaxation above in dijkstra). You can prove this algorithm using induction.
+If in the n - th step, we relax an edge, then we have a negative cycle (this is if and only if).
+
+Code :
+
+Bellman-Ford(int v)
+	d[i] = inf for each vertex i
+	d[v] = 0
+	for step = 1 to n
+		for all edges like e
+			i = e.first // first end
+			j = e.second // second end
+			w = e.weight
+			if d[j] > d[i] + w
+				if step == n
+					then return "Negative cycle found"
+				d[j] = d[i] + w
+
+Time complexity : O(nm).
+
+SPFA
+
+https://en.wikipedia.org/wiki/Shortest_Path_Faster_Algorithm
+
+SPFA (Shortest Path Faster Algorithm) is a fast and simple algorithm (single source) that its complexity is not calculated yet. But if m = O(n2) it's better to use the first implementation of Dijkstra.
+The origin of this algorithm is unknown. It's said that at first Chinese coders used it in programming contests.
+
+Its code looks like the combination of Dijkstra and BFS :
+
+SPFA(v):
+	d[i] = inf for each vertex i
+	d[v] = 0
+	queue q
+	q.push(v)
+	while q is not empty
+		u = q.front()
+		q.pop()
+		for each i in adj[u]
+			if d[i] > d[u] + w(u,i)
+				then d[i] = d[u] + w(u,i)
+				if i is not in q
+					then q.push(i)
+          
+Time complexity : Unknown!.
