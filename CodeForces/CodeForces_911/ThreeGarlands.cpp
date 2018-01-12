@@ -1,5 +1,4 @@
 // http://codeforces.com/problemset/problem/911/C
-// Before submiting
 
 #include <iostream>
 #include <algorithm>
@@ -24,3 +23,13 @@ int main(int argc, char* argv[]) {
 	
 	return 0;
 }
+
+/*
+2 2 3
+=====
+YES
+
+4 2 3
+=====
+NO
+*/
