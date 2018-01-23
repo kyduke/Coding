@@ -7,6 +7,26 @@ public:
         
         if (nums.size() <= 1) return nums.size();
         
+        j = 1;
+        for (i = 1; i < nums.size(); i++) {
+            if (nums[i] != nums[i - 1]) {
+                nums[j] = nums[i];
+                j++;
+            }
+        }
+        
+        return j;
+    }
+};
+
+/*
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        int i, j;
+        
+        if (nums.size() <= 1) return nums.size();
+        
         j = 0;
         for (i = 1; i < nums.size(); i++) {
             if (nums[i - 1] != nums[i]) {
@@ -29,3 +49,4 @@ public:
         return j;
     }
 };
+*/
