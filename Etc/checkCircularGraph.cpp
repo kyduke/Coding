@@ -18,7 +18,8 @@ int visited[SIZE] = {0, };
 int current[SIZE] = {0, };
 
 int dfs(int v) {
-    int i, u;
+    int i;
+    
     if (visited[v] == 1) {
         return current[v];
     }
