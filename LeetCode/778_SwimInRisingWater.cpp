@@ -24,28 +24,28 @@ private:
             
             if (i > 0) {
                 x = (i - 1) * n + j;
-                if (grid[i][j] <= k && visited[x] != visitedIndex) {
+                if (grid[i - 1][j] <= k && visited[x] != visitedIndex) {
                     visited[x] = visitedIndex;
                     q.push(x);
                 }
             }
             if (i < n - 1) {
                 x = (i + 1) * n + j;
-                if (grid[i][j] <= k && visited[x] != visitedIndex) {
+                if (grid[i + 1][j] <= k && visited[x] != visitedIndex) {
                     visited[x] = visitedIndex;
                     q.push(x);
                 }
             }
             if (j > 0) {
                 x = i * n + j - 1;
-                if (grid[i][j] <= k && visited[x] != visitedIndex) {
+                if (grid[i][j - 1] <= k && visited[x] != visitedIndex) {
                     visited[x] = visitedIndex;
                     q.push(x);
                 }
             }
             if (j < n - 1) {
                 x = i * n + j + 1;
-                if (grid[i][j] <= k && visited[x] != visitedIndex) {
+                if (grid[i][j + 1] <= k && visited[x] != visitedIndex) {
                     visited[x] = visitedIndex;
                     q.push(x);
                 }
