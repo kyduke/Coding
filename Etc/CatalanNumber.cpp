@@ -18,7 +18,9 @@ int ncr(UINT64 n, UINT64 r) {
 	UINT64 k;
 	int v;
 
-	if (r == 0 || n == r) {
+	r = min(r, n - r);
+
+	if (r == 0) {
 		return 1;
 	} else if (r == 1) {
 		return n;
