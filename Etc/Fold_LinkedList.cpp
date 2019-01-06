@@ -54,16 +54,14 @@ Node* foldLinkedList(Node* node, Node* parent, Node* root) {
 	if (node == NULL) return root;
 	
 	left = foldLinkedList(node->next, node, root);
-	if (left == NULL || left == node) return left;
+	if (left == NULL || left == node) return NULL;
 	
 	right = left->next;
-	if (right == NULL || right == node) return right;
+	if (right == NULL || right == node) return NULL;
 	
-	if (parent != NULL) {
-		left->next = node;
-		node->next = right;
-		parent->next = NULL;
-	}
+	left->next = node;
+	node->next = right;
+	parent->next = NULL;
 	
 	return right;
 }
