@@ -1,10 +1,9 @@
 // http://codeforces.com/contest/1023/problem/D
-// Time limit exceeded on test 14
+// Wrong answer on test 16
 // Reference code
 
 #include <iostream>
 #include <set>
-#include <queue>
 
 using namespace std;
 
@@ -12,16 +11,12 @@ const int SIZE = 200002;
 
 int arr[SIZE];
 int tmp[SIZE];
-int upAndDown[SIZE];
-int topAndBottom[SIZE];
-int leftBottom[SIZE];
-int rightBottom[SIZE];
+int compressed[SIZE];
 
 int main(int argc, char** argv) {
-	int n, q, z, i, j, k, x, y;
+	int n, q, z, i, j, k;
 	set<int> s;
 	set<int>::iterator it;
-	queue<int> qq;
 	
 	scanf("%d %d", &n, &q);
 	z = q;
@@ -44,72 +39,53 @@ int main(int argc, char** argv) {
 		i = *it;
 		j = i - 1;
 		while (j >= 0 && arr[j] == 0) {
-			tmp[j] = max(tmp[j], tmp[i]);
+			if (tmp[j] == 0) {
+				tmp[j] = tmp[i];
+			} else {
+				tmp[j] = min(tmp[j], tmp[i]);
+			}
 			j--;
 		}
 		j = i + 1;
 		while (j < n && arr[j] == 0) {
-			tmp[j] = max(tmp[j], tmp[i]);
+			if (tmp[j] == 0) {
+				tmp[j] = tmp[i];
+			} else {
+				tmp[j] = min(tmp[j], tmp[i]);
+			}
 			j++;
 		}
 	}
+	
 	for (i = 0; i < n; i++) {
 		if (tmp[i] == 0) tmp[i] = 1;
 	}
 	
-	upAndDown[0] = 0;
-	upAndDown[1] = tmp[0];
-	k = 2;
+	compressed[0] = 0;
+	compressed[1] = tmp[0];
+	j = 2;
 	for (i = 1; i < n; i++) {
 		if (tmp[i - 1] != tmp[i]) {
-			upAndDown[k] = tmp[i];
-			k++;
-		}
-	}
-	upAndDown[k] = 0;
-	k++;
-	
-	topAndBottom[0] = 0;
-	leftBottom[0] = -1;
-	rightBottom[0] = -1;
-	j = 1;
-	for (i = 1; i < k - 1; i++) {
-		if (upAndDown[i - 1] < upAndDown[i] && upAndDown[i] > upAndDown[i + 1]) {
-			qq.push(j);
-			topAndBottom[j] = upAndDown[i];
-			leftBottom[j] = j - 1;
-			rightBottom[j] = j + 1;
-			j++;
-		}
-		if (upAndDown[i - 1] > upAndDown[i] && upAndDown[i] < upAndDown[i + 1]) {
-			topAndBottom[j] = upAndDown[i];
-			leftBottom[j] = -1;
-			rightBottom[j] = -1;
+			compressed[j] = tmp[i];
 			j++;
 		}
 	}
-	topAndBottom[j] = 0;
-	leftBottom[j] = -1;
-	rightBottom[j] = -1;
+	compressed[j] = 0;
 	j++;
 	
-	while (!qq.empty()) {
-		k = qq.front();
-		qq.pop();
-		
-		x = leftBottom[k];
-		y = rightBottom[k];
-		
-		if (x == -1 || y == -1) continue;
-		
-		q -= (topAndBottom[k] - max(topAndBottom[x], topAndBottom[y]));
-		
-		rightBottom[x] = y;
-		leftBottom[y] = x;
-		
-		qq.push(x);
-		qq.push(y);
+	k = 0;
+	for (i = 1; i < j - 1; i++) {
+		// top
+		if (compressed[i - 1] < compressed[i] && compressed[i] > compressed[i + 1]) {
+			k += compressed[i];
+		}
+		// bottom
+		if (compressed[i - 1] > compressed[i] && compressed[i] < compressed[i + 1]) {
+			k -= compressed[i];
+		}
 	}
+	
+	q -= k;
 	
 	if (q > 0) {
 		for (i = 0; i < n; i++) {
@@ -120,10 +96,7 @@ int main(int argc, char** argv) {
 		}
 	}
 	
-	if (arr[0] == 12416  && n == 200000 && z == 200000) {
-		cout << q << "\n";
-	}
-	if (q < 0 && (n != 200000 || z != 200000)) {
+	if (q < 0) {
 		printf("NO\n");
 	} else {
 		printf("YES\n");
