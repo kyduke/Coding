@@ -1,8 +1,8 @@
 // https://codeforces.com/contest/1077/problem/D
-// ing...
 
 #include <iostream>
 #include <map>
+#include <vector>
 
 using namespace std;
 
@@ -12,44 +12,72 @@ const int SIZE = 200001;
 
 int arr[SIZE] = {0, };
 
+int solve(vector<int>& arr, int sum, int minValue, int k, int best) {
+    int i, c, x;
+    
+    x = min(sum / k, minValue);
+    while (x > best) {
+        c = 0;
+        for (i = 0; i < arr.size(); i++) {
+            c += arr[i] / x;
+        }
+        if (c >= k) return x;
+        x--;
+    }
+    
+    return -1;
+}
+
 int main() {
-	int n, k, i;
-	map<int, int> c;
-	map<int, int>::iterator ct;
-	multimap<INT64, int> f, b;
-	multimap<INT64, int>::iterator it, jt;
-	
-	scanf("%d %d", &n, &k);
-	for (i = 0; i < n; i++) {
-		scanf("%d", &arr[i]);
-		c[ arr[i] ]++;
-	}
-	
-	for (ct = c.begin(); ct != c.end(); ct++) {
-		b.insert(make_pair((ct->second * 10000000 + ct->first) * -1, ct->first));
-	}
-	
-	i = 0;
-	for (it = b.begin(); it != b.end(); it++) {
-		if (i == k) break;
-		f.insert(make_pair(it->first * -1, it->second));
-	}
-	while (it != b.end()) {
-		jt = it;
-		it++;
-		b.erase(jt);
-	}
-	
-	for (it = f.begin(); it != f.end(); it++) {
-		cout << it->first << ": " << it->second << "\n";
-	}
-	for (it = b.begin(); it != b.end(); it++) {
-		cout << it->first << ": " << it->second << "\n";
-	}
-	
-	
-	
-	return 0;
+    int n, k, i, sum, x, ans;
+    map<int, int> c;
+    map<int, int>::iterator ct;
+    multimap<INT64, int> m;
+    multimap<INT64, int>::iterator it, jt;
+    vector<int> v;
+    
+    scanf("%d %d", &n, &k);
+    for (i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+        c[ arr[i] ]++;
+    }
+    
+    for (ct = c.begin(); ct != c.end(); ct++) {
+        m.insert(make_pair(ct->second * -1, ct->first));
+    }
+    
+    i = 0;
+    for (it = m.begin(); it != m.end(); it++) {
+        if (i == k) break;
+    }
+    while (it != m.end()) {
+        jt = it;
+        it++;
+        m.erase(jt);
+    }
+    
+    ans = 0;
+    sum = 0;
+    for (it = m.begin(); it != m.end(); it++) {
+        x = it->first * -1;
+        if (x <= ans) break;
+        v.push_back(x);
+        sum += x;
+        ans = max(ans, solve(v, sum, x, k, ans));
+    }
+    
+    for (it = m.begin(); it != m.end(); it++) {
+        x = it->first * -1;
+        while (x >= ans && k > 0) {
+            printf("%d ", it->second);
+            x -= ans;
+            k--;
+        }
+        if (k == 0) break;
+    }
+    printf("\n");
+    
+    return 0;
 }
 
 /*
