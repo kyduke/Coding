@@ -47,8 +47,8 @@ void KMP(string pattern, string target) {
             k++;
             if (k == m) {
             	ans.push_back(i - m + 1);
-            	k--;
-            	k = fail[k];
+            	i--;
+            	k = fail[k - 1];
             }
         } else {
             k = fail[k];
