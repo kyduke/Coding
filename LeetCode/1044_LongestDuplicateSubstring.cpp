@@ -58,3 +58,53 @@ public:
         return str.substr(x, y);
     }
 };
+
+
+// Version 2, TLE
+class Solution {
+private:
+    int fail[100001] = {0, };
+    
+    int preKMP(string& pattern, int s) {
+        int i, m, k, x;
+
+        m = pattern.size();
+        fail[s] = s - 1;
+        x = 0;
+        for (i = s + 1; i < m; i++) {
+            k = fail[i - 1];
+            while (k >= s) {
+                if (pattern[k] == pattern[i - 1]) {
+                    break;
+                } else {
+                    k = fail[k];
+                }
+            }
+            fail[i] = k + 1;
+            x = max(x, fail[i]);
+        }
+        
+        return x - s;
+    }
+public:
+    string longestDupSubstring(string str) {
+        int i, ans, x, y, temp;
+        
+        str.push_back(' ');
+        
+        x = 0;
+        y = 0;
+        ans = 0;
+        for (i = 0; i < str.size() - 1; i++) {
+            if (str.size() - i <= ans) break;
+            temp = preKMP(str, i);
+            if (temp > ans) {
+                ans = temp;
+                x = i;
+                y = ans;
+            }
+        }
+        
+        return str.substr(x, y);
+    }
+};
